@@ -1,0 +1,50 @@
+.login-page {
+  background-color: #eef0f4;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-content {
+  max-width: 1300px;
+  max-height: 700px;
+  width: 80vw;
+  height: 80vh;
+  display: flex;
+  box-shadow: 0px 10px 40px rgba(29, 22, 23, 0.2);
+  background-image: url("https://sbd.sc-edu.com/image-host/cow-farming/cow-bg-image.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  &-left {
+    flex: 0 0 50%;
+    // background-image: url("https://sbd.sc-edu.com/image-host/cow-farming/admin-login-bg.svg");
+    // background-position: center;
+    // background-repeat: no-repeat;
+    // background-size: 80% 80%;
+    height: 100%;
+  }
+  &-right {
+    flex: 0 0 50%;
+    // background-color: #fff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: saturate(50%) blur(3px);
+    background: rgba(255, 255, 255, 0.8);
+
+    &-inner {
+      width: 360px;
+      .el-checkbox__input.is-checked + .el-checkbox__label {
+        color: unset;
+      }
+    }
+
+    .form-container {
+    }
+  }
+}

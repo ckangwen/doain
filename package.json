@@ -1,0 +1,24 @@
+{
+  "name": "create-admin",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "build:node": "pnpm --filter=@effective/node run build",
+    "app": "pnpm --filter=@effective/app run dev",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
+    "prettier": "prettier --write ./packages/**/*.{js,ts,tsx,css,scss,vue}"
+  },
+  "devDependencies": {
+    "@charrue/eslint-config-typescript": "latest",
+    "@charrue/eslint-config-vue3": "latest",
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
+    "@types/node": "^17.0.25",
+    "eslint": "^8.3.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "postcss-sorting": "^6.0.0",
+    "prettier": "^2.8.1",
+    "tsup": "^6.5.0",
+    "typescript": "^4.8.3"
+  }
+}

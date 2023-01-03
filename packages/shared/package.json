@@ -1,0 +1,12 @@
+{
+  "name": "@effective/shared",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "dependencies": {
+    "lodash-es": "^4.17.21"
+  },
+  "devDependencies": {
+    "@charrue/toolkit": "^0.13.1",
+    "@types/lodash-es": "^4.17.6"
+  }
+}
