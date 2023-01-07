@@ -1,5 +1,6 @@
 import { PlainObject, isFn, isPromise } from "@doain/shared";
 import { ElNotification } from "element-plus";
+import type { NotificationOptions } from "element-plus";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -18,6 +19,14 @@ export interface UseLoginOptions {
   beforeLogin?: (formValue: PlainObject) => boolean;
   afterLogin?: (value: { response: any; formValue: PlainObject }) => void;
 }
+
+const showMessage = (type: NotificationOptions["type"], message: string) => {
+  ElNotification({
+    type,
+    message,
+    duration: 1500,
+  });
+};
 
 export const createLoginState = (options: CreateLoginStateOptions) => {
   const { createDefaultFormValue, createDisabledGetter, formatSubmitValue } = options;
@@ -59,20 +68,14 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
       }
 
       if (errMsg) {
-        ElNotification.warning({
-          title: "提示",
-          message: errMsg,
-        });
+        showMessage("warning", errMsg);
       }
     };
 
     /** 登录接口报错 */
     const onSubmitError = (error: any, message: string) => {
       const errMsg = message || error?.message || "网络错误";
-      ElNotification.error({
-        title: "登录失败",
-        message: errMsg,
-      });
+      showMessage("error", errMsg);
     };
 
     /** 登录成功 */
@@ -85,10 +88,7 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
       httpClient.refreshToken();
 
       if (message) {
-        ElNotification.success({
-          title: "提示",
-          message,
-        });
+        showMessage("success", message);
       }
       userStore.refreshUserInfo(true);
 
@@ -98,16 +98,12 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
     /** 登录失败 */
     const onSubmitFailed = (data: PlainObject, message: string) => {
       if (message) {
-        ElNotification.error({
-          title: "提示",
-          message,
-        });
+        showMessage("error", message);
       }
     };
 
     // eslint-disable-next-line max-statements
     const doLogin = async () => {
-      console.log("doLogin", elFormRef);
       try {
         await elFormRef.value?.validate?.();
 

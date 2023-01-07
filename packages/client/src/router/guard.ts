@@ -1,18 +1,22 @@
 import { RouteLocationNormalized, Router } from "vue-router";
 
-import { getDoainConfig } from "../config/index";
+import { getDoainConfig, onDoainConfigChange } from "../config/index";
 import { getToken } from "../helpers/index";
 
 export const routerTokenGuard = (router: Router) => {
-  const globalConfig = getDoainConfig();
+  let globalConfig = getDoainConfig();
+
+  onDoainConfigChange((config) => {
+    globalConfig = config;
+  });
+
   const { tokenAuth } = globalConfig.router;
-  const { homeRoute, loginRoute, unimpededRoutes = [], unloggedRoutes = [] } = globalConfig.router;
   if (tokenAuth === false) {
     return;
   }
 
   const isUnloggedRoute = (route: RouteLocationNormalized) =>
-    unloggedRoutes.some((item) => {
+    (globalConfig.router.unloggedRoutes || []).some((item) => {
       if (item.startsWith("/")) {
         return item === route.path;
       }
@@ -20,7 +24,7 @@ export const routerTokenGuard = (router: Router) => {
     });
 
   const isUnimpededRoute = (route: RouteLocationNormalized) =>
-    unimpededRoutes.some((item) => {
+    (globalConfig.router.unimpededRoutes || []).some((item) => {
       if (item.startsWith("/")) {
         return item === route.path;
       }
@@ -31,6 +35,7 @@ export const routerTokenGuard = (router: Router) => {
     const hasLogin = !!getToken();
     const isUnlogged = isUnloggedRoute(to);
     const isUnimpeded = isUnimpededRoute(to);
+
     if (isUnimpeded) {
       next();
       return;
@@ -39,7 +44,7 @@ export const routerTokenGuard = (router: Router) => {
     // 如果是 仅未登录可访问的页面
     if (isUnlogged) {
       if (hasLogin) {
-        next(homeRoute);
+        next(globalConfig.router.homeRoute);
       } else {
         next();
       }
@@ -50,7 +55,7 @@ export const routerTokenGuard = (router: Router) => {
     if (hasLogin) {
       next();
     } else {
-      next(loginRoute);
+      next(globalConfig.router.loginRoute);
     }
   });
 };

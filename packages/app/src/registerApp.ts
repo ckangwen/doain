@@ -15,6 +15,9 @@ const sidebarMenu = defineLayoutConfig([
   },
 ]);
 
+const LOGIN_URL = "/user/login";
+const USERINFO_URL = "/client/info";
+
 defineDoainConfig({
   app: {
     appKey: APP_KEY,
@@ -33,9 +36,10 @@ defineDoainConfig({
   },
   fetch: {
     baseUrl: "https://dingdang.hndhi.cn/api_app",
+    tokenWhiteList: [LOGIN_URL],
     async fetchUserInfo() {
-      const { data, success } = await httpClient.request({
-        url: "/user/info",
+      const { data, success } = await httpClient.limitRepeatedRequest({
+        url: USERINFO_URL,
       });
       if (!success) {
         return {};
@@ -44,13 +48,13 @@ defineDoainConfig({
     },
     async login(data) {
       const res = await httpClient.request({
-        url: "/user/login",
+        url: LOGIN_URL,
         data,
       });
       return res;
     },
-    getTokenAfterLogin(response) {
-      return response.data?.token || "";
+    getTokenAfterLogin(data) {
+      return data?.token || "";
     },
   },
   store: {

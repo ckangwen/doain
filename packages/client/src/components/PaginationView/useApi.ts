@@ -12,7 +12,6 @@ const createMap = (max: number) => {
   return {
     get: (key: string) => map.get(key),
     set: (key: string, value: any) => {
-      console.log("map.size", map.size, key);
       // 如果map的长度超过10，就删除最早的那个
       if (map.size >= max) {
         map.delete(map.keys().next().value);

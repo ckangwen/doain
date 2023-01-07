@@ -8,8 +8,8 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     DefaultPageContainer: typeof import('./src/components/DefaultPageContainer.tsx')['default']
-    ElButton: typeof import("element-plus/es")["ElButton"]
-    ElFormItem: typeof import("element-plus/es")["ElFormItem"]
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     HeaderRight: typeof import("./src/components/DefaultLayout/HeaderRight.tsx")["default"]
     Layout: typeof import("./src/components/DefaultLayout/Layout.tsx")["default"]
     NavigationTab: typeof import("./src/components/DefaultLayout/NavigationTab/NavigationTab.tsx")["default"]

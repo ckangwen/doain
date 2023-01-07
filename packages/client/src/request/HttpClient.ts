@@ -25,8 +25,13 @@ export interface HttpClientResponse<T = any> {
   error: Error | null;
 }
 
+interface CreateHttpClient {
+  baseUrl: string;
+  tokenWhiteList?: string[];
+}
+
 export class HttpClient {
-  axiosInstance: AxiosInstance;
+  axiosInstance: AxiosInstance | undefined;
   timeout = 20000;
   defaultHeaders: Record<string, string> = {
     "content-type": "application/x-www-form-urlencoded",
@@ -51,18 +56,8 @@ export class HttpClient {
   /** 记录可以取消的接口 */
   private abortControllerMap: Record<string, AbortController> = {};
 
-  constructor(options: { baseUrl: string; tokenWhiteList?: string[] }) {
-    const { baseUrl } = options;
-    this.tokenWhiteList = options.tokenWhiteList || [];
-
-    const service = axios.create({
-      baseURL: baseUrl,
-      headers: this.defaultHeaders,
-      timeout: this.timeout,
-    });
-
-    this.axiosInstance = service;
-    this.setupInterceptors();
+  constructor(options: CreateHttpClient) {
+    this.resetAxiosInstance(options);
   }
 
   /**
@@ -83,6 +78,7 @@ export class HttpClient {
   private tokenGuardInterceptor = (config: AxiosRequestConfig) => {
     const { token } = this;
     const url = config.url!;
+
     if (!token && !this.tokenWhiteList.includes(url)) {
       this.noTokenRequestList.push(config);
       this.abortControllerMap[config.url!] = new AbortController();
@@ -124,13 +120,16 @@ export class HttpClient {
       }
 
       config.headers!.Authorization = getToken();
-      this.axiosInstance.request(config);
+      this.limitRepeatedRequest({
+        url,
+        data: config.data,
+      });
     });
 
     this.noTokenRequestList = [];
   };
 
-  private setupInterceptors = (service: AxiosInstance = this.axiosInstance) => {
+  private setupInterceptors = (service: AxiosInstance) => {
     service.interceptors.request.use(this.cancelRequestInterceptor);
     service.interceptors.request.use(this.tokenGuardInterceptor);
     service.interceptors.request.use(stringifyData);
@@ -145,8 +144,18 @@ export class HttpClient {
     };
   }
 
-  resetAxiosInstance = (instance: AxiosInstance) => {
-    this.axiosInstance = instance;
+  resetAxiosInstance = (options: CreateHttpClient) => {
+    const { baseUrl } = options;
+    this.tokenWhiteList = options.tokenWhiteList || [];
+
+    const service = axios.create({
+      baseURL: baseUrl,
+      headers: this.defaultHeaders,
+      timeout: this.timeout,
+    });
+
+    this.setupInterceptors(service);
+    this.axiosInstance = service;
   };
 
   /**
@@ -220,7 +229,7 @@ export class HttpClient {
     const { url, method = "POST", data = {} } = options;
 
     const [res, err] = await to(
-      this.axiosInstance.request<FetchResponse, FetchResponse>({
+      this.axiosInstance!.request<FetchResponse, FetchResponse>({
         method,
         url,
         data,

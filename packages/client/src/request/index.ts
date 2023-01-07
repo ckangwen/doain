@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import { getDoainConfig, onDoainConfigChange } from "../config/index";
 import { HttpClient } from "./HttpClient";
 import type { HttpClientResponse } from "./HttpClient";
@@ -13,12 +11,10 @@ const httpClient = new HttpClient({
 
 onDoainConfigChange((changed) => {
   if (changed.fetch.baseUrl !== config.fetch.baseUrl) {
-    const service = axios.create({
-      baseURL: changed.fetch.baseUrl,
-      headers: httpClient.defaultHeaders,
-      timeout: httpClient.timeout,
+    httpClient.resetAxiosInstance({
+      baseUrl: changed.fetch.baseUrl,
+      tokenWhiteList: changed.fetch.tokenWhiteList || [],
     });
-    httpClient.resetAxiosInstance(service);
   }
 });
 

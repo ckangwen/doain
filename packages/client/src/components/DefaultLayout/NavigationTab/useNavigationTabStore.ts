@@ -66,7 +66,6 @@ export const useNavigationTabStore = defineStore("GlobalNavigationTab", () => {
 
   const add = (routeData: RouteLocationNormalizedLoaded) => {
     const normalizedRoute = formatNormalizedRoute(routeData);
-    console.log("normalizedRoute", routeData, opened.value, normalizedRoute);
     // TODO: 如果没有name
     if (!normalizedRoute.name) {
       return false;
