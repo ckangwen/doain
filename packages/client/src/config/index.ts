@@ -2,6 +2,7 @@ import type { PlainObject } from "@effective/shared";
 import type { AxiosAdapter } from "axios";
 import type { RouteLocationRaw } from "vue-router";
 
+import type { HttpClientResponse } from "../request/index";
 import type { GlobalUserInfo } from "../store/index";
 import { createGlobalConfigFactory } from "./createGlobalConfigFactory";
 
@@ -22,8 +23,9 @@ interface EffectiveConfig {
   fetch: {
     baseUrl: string;
     adaptor?: AxiosAdapter;
-    fetchUserInfo: () => Promise<any>;
-    login: (data: any) => Promise<any>;
+    tokenWhiteList?: string[];
+    fetchUserInfo: () => Promise<HttpClientResponse>;
+    login: (data: any) => Promise<HttpClientResponse>;
     getTokenAfterLogin: (data: any) => string | Promise<string>;
   };
   component?: {
@@ -70,11 +72,22 @@ export const [defineEffectiveConfig, getEffectiveConfig, onEffectiveConfigChange
     },
     fetch: {
       baseUrl: "",
+      tokenWhiteList: [],
       fetchUserInfo() {
-        return Promise.resolve();
+        return Promise.resolve({
+          success: false,
+          data: null,
+          error: null,
+          message: "",
+        });
       },
       login() {
-        return Promise.resolve();
+        return Promise.resolve({
+          success: false,
+          data: null,
+          error: null,
+          message: "",
+        });
       },
       getTokenAfterLogin() {
         return "";

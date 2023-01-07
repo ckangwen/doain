@@ -1,27 +1,26 @@
-import { getEffectiveConfig, onEffectiveConfigChange } from "../config/index";
-import { createRequest } from "./http";
+import axios from "axios";
 
-export type { CreateRequestOptions } from "./http";
+import { getEffectiveConfig, onEffectiveConfigChange } from "../config/index";
+import { HttpClient } from "./HttpClient";
+import type { HttpClientResponse } from "./HttpClient";
 
 const config = getEffectiveConfig();
 
-let _request = createRequest({
+const httpClient = new HttpClient({
   baseUrl: config.fetch.baseUrl,
-  adaptor: config.fetch.adaptor,
+  tokenWhiteList: config.fetch.tokenWhiteList || [],
 });
 
 onEffectiveConfigChange((changed) => {
   if (changed.fetch.baseUrl !== config.fetch.baseUrl) {
-    _request = createRequest({
-      baseUrl: changed.fetch.baseUrl,
-      adaptor: changed.fetch.adaptor,
+    const service = axios.create({
+      baseURL: changed.fetch.baseUrl,
+      headers: httpClient.defaultHeaders,
+      timeout: httpClient.timeout,
     });
+    httpClient.resetAxiosInstance(service);
   }
 });
 
-type RequestParams = Parameters<typeof _request>;
-function request(...args: RequestParams) {
-  return _request(...args);
-}
-
-export { createRequest, request };
+export { HttpClient, httpClient };
+export type { HttpClientResponse };
