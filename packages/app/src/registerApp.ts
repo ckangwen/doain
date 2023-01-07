@@ -1,7 +1,7 @@
 import { APP_KEY } from "~constants";
 
 import { defineLayoutConfig } from "@charrue/layout-next";
-import { defineEffectiveConfig, request } from "@effective/client";
+import { defineEffectiveConfig, httpClient } from "@effective/client";
 import "@unocss/reset/tailwind.css";
 import "element-plus/dist/index.css";
 // https://github.com/Remix-Design/remixicon
@@ -34,14 +34,19 @@ defineEffectiveConfig({
   fetch: {
     baseUrl: "https://dingdang.hndhi.cn/api_app",
     async fetchUserInfo() {
-      const [data, err] = await request("/client/info");
-      if (err) {
+      const { data, success } = await httpClient.request({
+        url: "/user/info",
+      });
+      if (!success) {
         return {};
       }
-      return data.data || {};
+      return data || {};
     },
     async login(data) {
-      const res = await request("/user/login", data);
+      const res = await httpClient.request({
+        url: "/user/login",
+        data,
+      });
       return res;
     },
     getTokenAfterLogin(response) {

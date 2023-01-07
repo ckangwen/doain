@@ -2,7 +2,7 @@ import { CharrueSchemaTable, ColumnSchemaVO } from "@charrue/schema-table-next";
 import { ElNotification } from "element-plus";
 import { PropType, defineComponent, ref, watch } from "vue";
 
-import { request } from "../../request/index";
+import { httpClient } from "../../request/index";
 import { useInternalPaginationView } from "./useApi";
 
 export const PaginationTable = defineComponent({
@@ -102,19 +102,22 @@ export const PaginationTable = defineComponent({
           }
         : {};
 
-      const [res, err] = await request(props.url, {
-        ...paginationParams,
-        ...props.queryData,
+      const { data, success, error, message } = await httpClient.request({
+        url: props.url,
+        data: {
+          ...paginationParams,
+          ...props.queryData,
+        },
       });
 
-      if (err) {
+      if (!success && error) {
         resetState();
         showMessage("网络错误");
         return;
       }
 
-      if (res && Number(res.status) === 1) {
-        const list = props.paginationField ? res.data[props.paginationField] : res.data;
+      if (success) {
+        const list = props.paginationField ? data[props.paginationField] : data;
         setCache({
           url: props.url,
           page: page.value,
@@ -123,16 +126,16 @@ export const PaginationTable = defineComponent({
         });
         tableData.value = props.formatRow ? list.map(props.formatRow) : list;
 
-        total.value = res.data.total || 0;
+        total.value = data.total || 0;
         loading.value = false;
 
         if (typeof props.getHeaderScopeData === "function") {
-          headerScopeData.value = props.getHeaderScopeData(res.data);
+          headerScopeData.value = props.getHeaderScopeData(data);
         }
       } else {
         resetState();
 
-        showMessage(res.message);
+        showMessage(message);
       }
     };
 

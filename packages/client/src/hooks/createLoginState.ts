@@ -5,8 +5,8 @@ import { useRouter } from "vue-router";
 
 import { getEffectiveConfig } from "../config/index";
 import { setToken } from "../helpers/index";
+import { httpClient } from "../request/index";
 import { useUserStore } from "../store/index";
-import { FetchResponse } from "../types";
 
 export interface CreateLoginStateOptions {
   createDefaultFormValue: () => PlainObject;
@@ -67,8 +67,8 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
     };
 
     /** 登录接口报错 */
-    const onSubmitError = (err: Error, data: any) => {
-      const errMsg = data?.message || err?.message || "网络错误";
+    const onSubmitError = (error: any, message: string) => {
+      const errMsg = message || error?.message || "网络错误";
       ElNotification.error({
         title: "登录失败",
         message: errMsg,
@@ -76,24 +76,33 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
     };
 
     /** 登录成功 */
-    const onSubmitSuc = async (response: FetchResponse) => {
+    const onSubmitSuc = async (data: PlainObject, message: string) => {
       const token = isPromise(getTokenAfterLogin)
-        ? await getTokenAfterLogin(response)
-        : getTokenAfterLogin(response);
+        ? await getTokenAfterLogin(data)
+        : getTokenAfterLogin(data);
 
       setToken(token.toString());
+      httpClient.refreshToken();
+
+      if (message) {
+        ElNotification.success({
+          title: "提示",
+          message,
+        });
+      }
       userStore.refreshUserInfo(true);
 
       router.push(homeRoute);
     };
 
     /** 登录失败 */
-    const onSubmitFailed = (response: FetchResponse) => {
-      const message = response?.message || "登录失败";
-      ElNotification.error({
-        title: "提示",
-        message,
-      });
+    const onSubmitFailed = (data: PlainObject, message: string) => {
+      if (message) {
+        ElNotification.error({
+          title: "提示",
+          message,
+        });
+      }
     };
 
     // eslint-disable-next-line max-statements
@@ -109,30 +118,28 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
         if (isFn(beforeLogin)) {
           const shouldContinue = beforeLogin(submitValue);
           if (!shouldContinue) {
-            hideLoading();
             return;
           }
         }
 
         loading.value = true;
 
-        console.log("submitValue", login, isPromise(login));
-        const [res, err] = await login(submitValue);
+        const { success, data, error, message } = await login(submitValue);
         hideLoading();
 
-        if (err) {
-          onSubmitError(err, res);
+        if (!success && error) {
+          onSubmitError(error, message);
           return;
         }
 
-        if (res && Number(res.status) === 1) {
-          await onSubmitSuc(res);
+        if (success) {
+          await onSubmitSuc(data, message);
         } else {
-          onSubmitFailed(res);
+          onSubmitFailed(data, message);
         }
 
         if (isFn(afterLogin)) {
-          afterLogin({ response: res, formValue: formValue.value });
+          afterLogin({ response: data, formValue: formValue.value });
         }
       } catch (e: any) {
         console.error(e);
