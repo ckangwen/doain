@@ -1,0 +1,89 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "effective-admin",
+    "version": "last"
+  },
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/info": {
+      "post": {
+        "parameters": [
+          {
+            "name": "type",
+            "in": "formData",
+            "required": true,
+            "description": "type",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "description": "data",
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string",
+                  "default": "message",
+                  "x-go-name": "Message"
+                },
+                "status": {
+                  "type": "integer",
+                  "format": "int64",
+                  "default": 1,
+                  "x-go-name": "Status"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get": {
+      "post": {
+        "parameters": [
+          {
+            "name": "type",
+            "in": "formData",
+            "required": true,
+            "description": "type",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "description": "data",
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string",
+                  "default": "message",
+                  "x-go-name": "Message"
+                },
+                "status": {
+                  "type": "integer",
+                  "format": "int64",
+                  "default": 1,
+                  "x-go-name": "Status"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
