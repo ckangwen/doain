@@ -1,10 +1,10 @@
 import { RouteLocationNormalized, Router } from "vue-router";
 
-import { getEffectiveConfig } from "../config/index";
+import { getDoainConfig } from "../config/index";
 import { getToken } from "../helpers/index";
 
 export const routerTokenGuard = (router: Router) => {
-  const globalConfig = getEffectiveConfig();
+  const globalConfig = getDoainConfig();
   const { tokenAuth } = globalConfig.router;
   const { homeRoute, loginRoute, unimpededRoutes = [], unloggedRoutes = [] } = globalConfig.router;
   if (tokenAuth === false) {

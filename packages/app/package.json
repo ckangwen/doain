@@ -1,5 +1,5 @@
 {
-  "name": "@effective/app",
+  "name": "@doain/app",
   "private": true,
   "scripts": {
     "build": "vite build",
@@ -10,7 +10,7 @@
     "@charrue/layout-next": "^1.0.2",
     "@charrue/schema-form-next": "^1.0.0",
     "@charrue/schema-table-next": "^1.0.2",
-    "@effective/client": "workspace:*",
+    "@doain/client": "workspace:*",
     "@element-plus/icons-vue": "^2.0.10",
     "@vueuse/core": "^9.6.0",
     "axios": "^0.26.1",

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getToken, useUserData } from "@effective/client";
+import { getToken, useUserData } from "@doain/client";
 
 const token = getToken();
 const userData = useUserData();

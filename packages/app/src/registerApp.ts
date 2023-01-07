@@ -1,7 +1,7 @@
 import { APP_KEY } from "~constants";
 
 import { defineLayoutConfig } from "@charrue/layout-next";
-import { defineEffectiveConfig, httpClient } from "@effective/client";
+import { defineDoainConfig, httpClient } from "@doain/client";
 import "@unocss/reset/tailwind.css";
 import "element-plus/dist/index.css";
 // https://github.com/Remix-Design/remixicon
@@ -15,7 +15,7 @@ const sidebarMenu = defineLayoutConfig([
   },
 ]);
 
-defineEffectiveConfig({
+defineDoainConfig({
   app: {
     appKey: APP_KEY,
     storageKey: APP_KEY,

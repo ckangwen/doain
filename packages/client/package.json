@@ -1,5 +1,5 @@
 {
-  "name": "@effective/client",
+  "name": "@doain/client",
   "version": "0.0.1",
   "main": "src/index.ts",
   "dependencies": {
@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@charrue/vitest-service": "^0.0.2",
-    "@effective/shared": "workspace:*",
+    "@doain/shared": "workspace:*",
     "@types/element-resize-detector": "^1.1.3",
     "@types/qs": "^6.9.7",
     "jsdom": "^20.0.3",

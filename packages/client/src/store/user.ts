@@ -1,7 +1,7 @@
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
 
-import { getEffectiveConfig } from "../config/index";
+import { getDoainConfig } from "../config/index";
 import { createSessionStorage } from "../helpers/index";
 
 const sStorage = createSessionStorage();
@@ -27,7 +27,7 @@ function getCachedUserInfo(): GlobalUserInfo {
 }
 
 export const useUserStore = defineStore("appUser", () => {
-  const globalConfig = getEffectiveConfig();
+  const globalConfig = getDoainConfig();
 
   const userInfo = ref(getCachedUserInfo());
   // 是否已经加载过用户信息

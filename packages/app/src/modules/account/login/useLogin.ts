@@ -1,5 +1,5 @@
 import { createInputSchema, createSchemaPipeline } from "@charrue/schema-form-next";
-import { createLoginState } from "@effective/client";
+import { createLoginState } from "@doain/client";
 
 import { validateMobile } from "./helper";
 

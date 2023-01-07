@@ -1,4 +1,4 @@
-import { connectRouterStore, routerTokenGuard } from "@effective/client";
+import { connectRouterStore, routerTokenGuard } from "@doain/client";
 import { setupLayouts } from "virtual:generated-layouts";
 import generatedRoutes from "virtual:generated-pages";
 import { createRouter, createWebHashHistory } from "vue-router";

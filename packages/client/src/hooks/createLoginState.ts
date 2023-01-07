@@ -1,9 +1,9 @@
-import { PlainObject, isFn, isPromise } from "@effective/shared";
+import { PlainObject, isFn, isPromise } from "@doain/shared";
 import { ElNotification } from "element-plus";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 
-import { getEffectiveConfig } from "../config/index";
+import { getDoainConfig } from "../config/index";
 import { setToken } from "../helpers/index";
 import { httpClient } from "../request/index";
 import { useUserStore } from "../store/index";
@@ -21,7 +21,7 @@ export interface UseLoginOptions {
 
 export const createLoginState = (options: CreateLoginStateOptions) => {
   const { createDefaultFormValue, createDisabledGetter, formatSubmitValue } = options;
-  const globalConfig = getEffectiveConfig();
+  const globalConfig = getDoainConfig();
 
   const { homeRoute } = globalConfig.router;
   const { getTokenAfterLogin, login } = globalConfig.fetch;

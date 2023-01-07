@@ -1,4 +1,4 @@
-import { to } from "@effective/shared";
+import { to } from "@doain/shared";
 import type { AxiosAdapter, Method } from "axios";
 import axios from "axios";
 

@@ -1,4 +1,4 @@
-import type { PlainObject } from "@effective/shared";
+import type { PlainObject } from "@doain/shared";
 import type { AxiosAdapter } from "axios";
 import type { RouteLocationRaw } from "vue-router";
 
@@ -6,7 +6,7 @@ import type { HttpClientResponse } from "../request/index";
 import type { GlobalUserInfo } from "../store/index";
 import { createGlobalConfigFactory } from "./createGlobalConfigFactory";
 
-interface EffectiveConfig {
+interface DoainConfig {
   app: {
     appKey: string;
     storageKey: string;
@@ -51,10 +51,10 @@ interface EffectiveConfig {
   };
 }
 
-const APP_KEY = "effective-admin";
+const APP_KEY = "doain-admin";
 
-export const [defineEffectiveConfig, getEffectiveConfig, onEffectiveConfigChange] =
-  createGlobalConfigFactory<EffectiveConfig>({
+export const [defineDoainConfig, getDoainConfig, onDoainConfigChange] =
+  createGlobalConfigFactory<DoainConfig>({
     app: {
       appKey: APP_KEY,
       storageKey: APP_KEY,

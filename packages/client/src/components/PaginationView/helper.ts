@@ -1,8 +1,8 @@
-import { PlainObject, has, isFn } from "@effective/shared";
+import { PlainObject, has, isFn } from "@doain/shared";
 
-import { getEffectiveConfig } from "../../config/index";
+import { getDoainConfig } from "../../config/index";
 
-const globalConfig = getEffectiveConfig();
+const globalConfig = getDoainConfig();
 const userFormatColumnValue = globalConfig.component?.paginationView?.formatColumnValue;
 const userFormatQueryValue = globalConfig.component?.paginationView?.formatQueryValue;
 

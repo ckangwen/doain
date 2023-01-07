@@ -1,5 +1,5 @@
 import { CharrueSchemaForm, FormSchemaDef } from "@charrue/schema-form-next";
-import { createFromSchemaDefaultValue, isEmpty } from "@effective/shared";
+import { createFromSchemaDefaultValue, isEmpty } from "@doain/shared";
 import { PropType, Slot, computed, defineComponent, ref } from "vue";
 
 import { PaginationTable } from "./PaginationTable";

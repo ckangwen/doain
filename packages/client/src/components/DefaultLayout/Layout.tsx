@@ -2,7 +2,7 @@ import { CharrueLayout } from "@charrue/layout-next";
 import { defineComponent, ref } from "vue";
 import { RouterView } from "vue-router";
 
-import { getEffectiveConfig } from "../../config/index";
+import { getDoainConfig } from "../../config/index";
 import HeaderRight from "./HeaderRight";
 import { NavigationTab } from "./NavigationTab/index";
 
@@ -15,7 +15,7 @@ export const GlobalLayout = defineComponent({
     };
   },
   render() {
-    const layoutConfig = getEffectiveConfig().layout;
+    const layoutConfig = getDoainConfig().layout;
 
     return (
       <div class="global-layout-container">

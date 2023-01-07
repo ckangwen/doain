@@ -2,12 +2,12 @@ import elementResizeDetectorMaker from "element-resize-detector";
 import { Ref, computed, nextTick, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { getEffectiveConfig } from "../../../config/index";
+import { getDoainConfig } from "../../../config/index";
 import { createLocalStorage } from "../../../helpers/index";
 import { NormalizedRouteData, formatNormalizedRoute } from "./shared";
 import { useNavigationTabStore } from "./useNavigationTabStore";
 
-const globalConfig = getEffectiveConfig();
+const globalConfig = getDoainConfig();
 const SCROLL_AMPLITUDE = 20;
 const getTabKey = (routeFullPath: string) => `tag-${routeFullPath.split("/").join("-")}`;
 

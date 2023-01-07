@@ -1,4 +1,4 @@
-import { PlainObject } from "@effective/shared";
+import { PlainObject } from "@doain/shared";
 
 export function createGlobalConfigFactory<Config extends PlainObject>(defaultValue: Config) {
   let _globalConfig: Config = defaultValue;

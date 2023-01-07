@@ -1,4 +1,4 @@
-import { httpClient } from "@effective/client";
+import { httpClient } from "@doain/client";
 
 export const Demo = defineComponent({
   name: "Demo",

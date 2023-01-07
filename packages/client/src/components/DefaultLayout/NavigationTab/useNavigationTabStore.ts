@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
-import { merge } from "@effective/shared";
+import { merge } from "@doain/shared";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { RouteLocationNormalizedLoaded } from "vue-router";
 
-import { getEffectiveConfig } from "../../../config/index";
+import { getDoainConfig } from "../../../config/index";
 import { createLocalStorage } from "../../../helpers/index";
 import { NormalizedRouteData, formatNormalizedRoute } from "./shared";
 
-const globalConfig = getEffectiveConfig();
+const globalConfig = getDoainConfig();
 
 // 不需要出现在标签页中的路由
 // const whiteList: Array<NonNullable<NormalizedRouteData["name"]>> = ["Redirect", "login"];

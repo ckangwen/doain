@@ -3,7 +3,7 @@ import { ElDropdown, ElDropdownItem, ElDropdownMenu } from "element-plus";
 import { computed, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 
-import { getEffectiveConfig } from "../../config/index";
+import { getDoainConfig } from "../../config/index";
 import { removeToken } from "../../helpers/index";
 import { useUserData, useUserStore } from "../../store/index";
 
@@ -17,7 +17,7 @@ const HeaderRight = defineComponent({
     const router = useRouter();
     const userStore = useUserStore();
     const userData = useUserData();
-    const config = getEffectiveConfig();
+    const config = getDoainConfig();
 
     const { loginRoute } = config.router;
     const { isFullscreen, toggle: toggleFullscreen } = useFullscreen();

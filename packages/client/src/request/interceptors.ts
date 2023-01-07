@@ -1,4 +1,4 @@
-import { getGlobalThis } from "@effective/shared";
+import { getGlobalThis } from "@doain/shared";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import { stringify } from "qs";
 

@@ -1,4 +1,4 @@
-import { has } from "@effective/shared";
+import { has } from "@doain/shared";
 import { describe, expect, test } from "vitest";
 
 import { setToken } from "../src/helpers/token";

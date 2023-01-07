@@ -1,4 +1,4 @@
-import { PlainObject } from "@effective/shared";
+import { PlainObject } from "@doain/shared";
 import { DialogProps, ElDialog } from "element-plus";
 import { VNode, h, ref } from "vue";
 

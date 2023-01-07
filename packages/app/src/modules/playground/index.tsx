@@ -1,6 +1,6 @@
 import { DefaultPageContainer } from "~components";
 
-import { createDialog } from "@effective/client";
+import { createDialog } from "@doain/client";
 import { ElButton } from "element-plus";
 import { defineComponent } from "vue";
 

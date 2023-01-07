@@ -1,4 +1,4 @@
-import { GlobalLayout } from "@effective/client";
+import { GlobalLayout } from "@doain/client";
 import { defineComponent } from "vue";
 
 export default defineComponent({

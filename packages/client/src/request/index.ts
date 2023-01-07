@@ -1,17 +1,17 @@
 import axios from "axios";
 
-import { getEffectiveConfig, onEffectiveConfigChange } from "../config/index";
+import { getDoainConfig, onDoainConfigChange } from "../config/index";
 import { HttpClient } from "./HttpClient";
 import type { HttpClientResponse } from "./HttpClient";
 
-const config = getEffectiveConfig();
+const config = getDoainConfig();
 
 const httpClient = new HttpClient({
   baseUrl: config.fetch.baseUrl,
   tokenWhiteList: config.fetch.tokenWhiteList || [],
 });
 
-onEffectiveConfigChange((changed) => {
+onDoainConfigChange((changed) => {
   if (changed.fetch.baseUrl !== config.fetch.baseUrl) {
     const service = axios.create({
       baseURL: changed.fetch.baseUrl,

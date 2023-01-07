@@ -1,6 +1,6 @@
-import { getEffectiveConfig } from "../config/index";
+import { getDoainConfig } from "../config/index";
 
-const globalConfig = getEffectiveConfig();
+const globalConfig = getDoainConfig();
 const STORAGE_KEY = globalConfig.app.storageKey;
 const VERSION = globalConfig.app.version;
 
