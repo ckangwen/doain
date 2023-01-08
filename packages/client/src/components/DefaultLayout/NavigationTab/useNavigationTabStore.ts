@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { merge } from "@doain/shared";
+import { merge } from "@charrue/toolkit";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { RouteLocationNormalizedLoaded } from "vue-router";

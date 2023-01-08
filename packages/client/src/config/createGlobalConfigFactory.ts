@@ -1,6 +1,6 @@
-import { PlainObject } from "@doain/shared";
-
-export function createGlobalConfigFactory<Config extends PlainObject>(defaultValue: Config) {
+export function createGlobalConfigFactory<Config extends Record<string, any>>(
+  defaultValue: Config,
+) {
   let _globalConfig: Config = defaultValue;
 
   const cbs = new Set<(config: Config) => void>();

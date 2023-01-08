@@ -1,10 +1,11 @@
-import { PlainObject, has, isFn } from "@doain/shared";
+import { has, isFn } from "@charrue/toolkit";
 
 import { getDoainConfig } from "../../config/index";
 
-const globalConfig = getDoainConfig();
-const userFormatColumnValue = globalConfig.component?.paginationView?.formatColumnValue;
-const userFormatQueryValue = globalConfig.component?.paginationView?.formatQueryValue;
+const userFormatColumnValue = getDoainConfig().component?.paginationView?.formatColumnValue;
+const userFormatQueryValue = getDoainConfig().component?.paginationView?.formatQueryValue;
+
+type TableData = Record<string, any>;
 
 /**
  * 格式化列值
@@ -42,7 +43,7 @@ export const createFormatRowFactory = (
     return cachedFormatRow[cacheKey];
   }
 
-  const fn = (data: PlainObject = {}) =>
+  const fn = (data: TableData = {}) =>
     columns.reduce((acc, cur) => {
       const key: string = cur.prop;
       const value = data[key] === 0 ? 0 : data[key] || "-";
@@ -56,7 +57,7 @@ export const createFormatRowFactory = (
   return fn;
 };
 
-export const formatQueryValue = (formData: PlainObject): PlainObject =>
+export const formatQueryValue = (formData: TableData): TableData =>
   Object.keys(formData)
     .filter((key) => formData[key] !== undefined)
     .reduce((acc, key) => {

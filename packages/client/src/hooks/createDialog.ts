@@ -1,4 +1,3 @@
-import { PlainObject } from "@doain/shared";
 import { DialogProps, ElDialog } from "element-plus";
 import { VNode, h, ref } from "vue";
 
@@ -23,7 +22,7 @@ type CreateElDialogEvents = Partial<{
   onCloseAutoFocus: () => () => void;
 }>;
 
-export const createDialog = (
+export const createDialog = <E extends Record<string, any> = Record<string, any>>(
   NestedComponent: any,
   dialogProps: CreateElDialogOptions = elDialogDefaultProps,
   dialogEvents: CreateElDialogEvents = {},
@@ -31,18 +30,18 @@ export const createDialog = (
   () => VNode,
   {
     toggle: () => void;
-    open: (data?: PlainObject) => void;
+    open: (data?: E) => void;
     close: () => void;
   },
 ] => {
   const dialogPropsWithDefaults = Object.assign(elDialogDefaultProps, dialogProps);
   const visible = ref(false);
 
-  const extraData = ref<PlainObject>({});
+  const extraData = ref<E>({} as unknown as E);
   const toggle = () => {
     visible.value = !visible.value;
   };
-  const open = (data?: PlainObject) => {
+  const open = (data?: E) => {
     visible.value = true;
     if (data) {
       extraData.value = data;

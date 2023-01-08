@@ -1,4 +1,3 @@
-import type { PlainObject } from "@doain/shared";
 import type { AxiosAdapter } from "axios";
 import type { RouteLocationRaw } from "vue-router";
 
@@ -18,7 +17,8 @@ interface DoainConfig {
     ignoreNavigationTabKey: string;
   };
   store: {
-    getRequiredUserData: (userInfo: PlainObject) => GlobalUserInfo;
+    // TODO: UserInfo类型
+    getRequiredUserData: (userInfo: Record<string, any>) => GlobalUserInfo;
   };
   fetch: {
     baseUrl: string;

@@ -1,4 +1,4 @@
-import { PlainObject, isFn, isPromise } from "@doain/shared";
+import { isFn, isPromise } from "@charrue/toolkit";
 import { ElNotification } from "element-plus";
 import type { NotificationOptions } from "element-plus";
 import { computed, ref } from "vue";
@@ -9,15 +9,17 @@ import { setToken } from "../helpers/index";
 import { httpClient } from "../request/index";
 import { useUserStore } from "../store/index";
 
+type FormValue = Record<string, any>;
+
 export interface CreateLoginStateOptions {
-  createDefaultFormValue: () => PlainObject;
-  createDisabledGetter?: (formValue: PlainObject) => boolean;
-  formatSubmitValue?: (formValue: PlainObject) => PlainObject;
+  createDefaultFormValue: () => FormValue;
+  createDisabledGetter?: (formValue: FormValue) => boolean;
+  formatSubmitValue?: (formValue: FormValue) => FormValue;
 }
 
 export interface UseLoginOptions {
-  beforeLogin?: (formValue: PlainObject) => boolean;
-  afterLogin?: (value: { response: any; formValue: PlainObject }) => void;
+  beforeLogin?: (formValue: FormValue) => boolean;
+  afterLogin?: (value: { response: any; formValue: FormValue }) => void;
 }
 
 const showMessage = (type: NotificationOptions["type"], message: string) => {
@@ -79,7 +81,7 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
     };
 
     /** 登录成功 */
-    const onSubmitSuc = async (data: PlainObject, message: string) => {
+    const onSubmitSuc = async (data: FormValue, message: string) => {
       const token = isPromise(getTokenAfterLogin)
         ? await getTokenAfterLogin(data)
         : getTokenAfterLogin(data);
@@ -96,7 +98,7 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
     };
 
     /** 登录失败 */
-    const onSubmitFailed = (data: PlainObject, message: string) => {
+    const onSubmitFailed = (data: FormValue, message: string) => {
       if (message) {
         showMessage("error", message);
       }

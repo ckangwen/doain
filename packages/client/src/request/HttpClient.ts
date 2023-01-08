@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/member-ordering */
-import { has, to } from "@doain/shared";
+import { has, to } from "@charrue/toolkit";
 import type { AxiosInstance, AxiosRequestConfig, Method } from "axios";
 import axios from "axios";
 import mitt from "mitt";

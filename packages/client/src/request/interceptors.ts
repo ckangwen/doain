@@ -1,10 +1,10 @@
-import { getGlobalThis } from "@doain/shared";
+import { inBrowser } from "@charrue/toolkit";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import { stringify } from "qs";
 
 export const stringifyData = (axiosConfig: AxiosRequestConfig) => {
   try {
-    if (getGlobalThis().FormData && axiosConfig.data instanceof FormData) {
+    if (inBrowser && axiosConfig.data instanceof FormData) {
       Object.keys(axiosConfig.data).forEach((k) => {
         axiosConfig.data.append(k, axiosConfig.data.get(k));
       });

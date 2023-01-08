@@ -1,4 +1,4 @@
-import { has } from "@doain/shared";
+import { has } from "@charrue/toolkit";
 import { describe, expect, test } from "vitest";
 
 import { setToken } from "../src/helpers/token";
