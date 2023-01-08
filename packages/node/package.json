@@ -1,0 +1,38 @@
+{
+  "name": "@doain/node",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "type": "module",
+  "dependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitejs/plugin-vue-jsx": "^2.1.1",
+    "debug": "^4.3.4",
+    "fs-extra": "^11.1.0",
+    "minimist": "^1.2.7",
+    "picocolors": "^1.0.0",
+    "rollup-plugin-visualizer": "^5.8.3",
+    "unocss": "^0.45.29",
+    "unplugin-auto-import": "^0.11.4",
+    "unplugin-vue-components": "^0.22.9",
+    "vite": "^4.0.3",
+    "vite-plugin-inspect": "^0.7.8",
+    "vite-plugin-pages": "^0.27.1",
+    "vite-plugin-vue-layouts": "^0.7.0"
+  },
+  "bin": {
+    "doain": "bin/doain.js"
+  },
+  "devDependencies": {
+    "@doain/shared": "workspace:*",
+    "@types/debug": "^4.1.7",
+    "@types/fs-extra": "^9.0.13",
+    "@types/minimist": "^1.2.2",
+    "type-fest": "^3.5.1"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup",
+    "test": "vitest"
+  }
+}

@@ -2,9 +2,10 @@
   "name": "create-admin",
   "private": true,
   "scripts": {
-    "build": "vite build",
-    "build:node": "pnpm --filter=@doain/node run build",
-    "app": "pnpm --filter=@doain/app run dev",
+    "dev": "run-s dev:*",
+    "dev:node": "pnpm --filter=@doain/node run dev",
+    "dev:client": "pnpm --filter=@doain/client run dev",
+    "dev:play": "pnpm --filter=playground run dev",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "prettier": "prettier --write ./packages/**/*.{js,ts,tsx,css,scss,vue}"
   },
@@ -16,9 +17,11 @@
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "npm-run-all": "^4.1.5",
     "postcss-sorting": "^6.0.0",
     "prettier": "^2.8.1",
     "tsup": "^6.5.0",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.3",
+    "vitest": "^0.26.3"
   }
 }
