@@ -1,0 +1,17 @@
+{
+  "name": "playground",
+  "version": "0.0.1",
+  "type": "module",
+  "devDependencies": {
+    "@doain/node": "workspace:*",
+    "@doain/client": "workspace:*"
+  },
+  "dependencies": {
+    "pinia": "^2.0.26",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
+  },
+  "scripts": {
+    "dev": "doain"
+  }
+}
