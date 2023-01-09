@@ -1,4 +1,5 @@
 import router from "~doain/router";
+import store from "~doain/store";
 
 import { createApp, defineComponent, h, onMounted } from "vue";
 import { RouterView } from "vue-router";
@@ -26,6 +27,12 @@ function createClientApp() {
 
 if (inBrowser) {
   const { app } = createClientApp();
-  app.use(router);
+  if (router) {
+    app.use(router);
+  }
+  if (store) {
+    app.use(store);
+  }
+
   app.mount("#app");
 }

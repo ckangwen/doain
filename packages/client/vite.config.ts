@@ -7,7 +7,7 @@ import pkg from "./package.json";
 
 const external = Object.keys(pkg.dependencies || {});
 
-const routerFiles = fg.sync(["./app/router/*.ts"]);
+const routerFiles = fg.sync(["./app/router/*.ts", "./app/store/*.ts"]);
 export default defineConfig({
   plugins: [vue(), vueJsx()],
   build: {

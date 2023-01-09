@@ -22,9 +22,17 @@ export const APP_PATH = join(DIST_CLIENT_PATH, "app");
 export const SHARED_PATH = join(DIST_CLIENT_PATH, "shared");
 export const DEFAULT_THEME_DIR = join(DIST_CLIENT_PATH, "theme");
 
-export function createClientAlias(config: DoainConfig): Alias[] {
-  const { root, builtPlugins } = config;
-  const { pages, pageLayout } = builtPlugins;
+/**
+ * 根据是否启用`vite-plugin-pages`,`vite-plugin-vue-layouts`
+ * 加载不同的router
+ *
+ * 如果这两个插件都不启用，则优先加载根目录`src/router/index`的默认导出的router
+ */
+function getRouterPath(
+  root: string,
+  pages: DoainConfig["builtPlugins"]["pages"],
+  pageLayout: DoainConfig["builtPlugins"]["pageLayout"],
+) {
   let routerPath = join(DIST_CLIENT_PATH, "app/router/original.js");
   if (pages && pageLayout) {
     routerPath = join(DIST_CLIENT_PATH, "app/router/vue-layouts.js");
@@ -40,11 +48,36 @@ export function createClientAlias(config: DoainConfig): Alias[] {
       routerPath = userRouter;
     }
   }
+  return routerPath;
+}
+
+/**
+ * 优先加载根目录`src/store/index`的默认导出的store
+ */
+function getStorePath(root: string) {
+  let storePath = join(DIST_CLIENT_PATH, "app/store/original.js");
+  const userStorePath = ["ts", "js"]
+    .map((ext) => join(root, `src/store/index.${ext}`))
+    .find(fs.pathExistsSync);
+  if (userStorePath) {
+    storePath = userStorePath;
+  }
+
+  return storePath;
+}
+
+export function createClientAlias(config: DoainConfig): Alias[] {
+  const { root, builtPlugins } = config;
+  const { pages, pageLayout } = builtPlugins;
 
   const alias = [
     {
       find: "~doain/router",
-      replacement: routerPath,
+      replacement: getRouterPath(root, pages, pageLayout),
+    },
+    {
+      find: "~doain/store",
+      replacement: getStorePath(root),
     },
   ];
 
