@@ -1,6 +1,7 @@
+import { getDoainConfig, subscribeDoainConfigKey } from "~toolkit";
+
 import { RouteLocationNormalized, Router } from "vue-router";
 
-import { getDoainConfig, subscribeDoainConfigKey } from "../config/index";
 import { getToken } from "../helpers/index";
 
 export const routerTokenGuard = (router: Router) => {

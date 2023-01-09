@@ -3,7 +3,7 @@ import type { AxiosAdapter } from "axios";
 import mitt, { EventType } from "mitt";
 import type { RouteLocationRaw } from "vue-router";
 
-import type { HttpClientResponse } from "../request/index";
+import type { HttpClientResponse } from "./request/index";
 
 export interface DoainConfig<GlobalUserInfo = Record<string, any>> {
   app: {

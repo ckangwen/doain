@@ -1,7 +1,8 @@
+import { getDoainConfig } from "~toolkit";
+
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
 
-import { getDoainConfig } from "../config/index";
 import { createSessionStorage } from "../helpers/index";
 
 const sStorage = createSessionStorage();
