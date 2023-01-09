@@ -18,12 +18,6 @@ import { Awaitable, createDebug } from "./helper";
 
 const debug = createDebug("config");
 
-function resolveFromDoain(root: string, file: string) {
-  return normalizePath(path.resolve(root, `.${APP_NAME}`, file));
-}
-
-const supportedConfigExtensions = ["js", "ts", "cjs", "mjs", "cts", "mts"];
-
 type AutoImportPluginOptions = Parameters<typeof AutoImportPlugin>[0];
 
 interface BuiltPlugins {
@@ -64,6 +58,15 @@ export interface DoainConfig extends RequiredUserConfig {
 
 export type RawConfigExports = Awaitable<UserConfig> | (() => Awaitable<UserConfig>);
 
+function resolveFromDoain(root: string, file: string) {
+  return normalizePath(path.resolve(root, `.${APP_NAME}`, file));
+}
+
+const supportedConfigExtensions = ["js", "ts", "cjs", "mjs", "cts", "mts"];
+
+/**
+ * 读取`.doain/config.ext`的用户配置，以及该文件的依赖文件
+ */
 export async function resolveUserConfig(
   root: string,
   command: "serve" | "build" = "serve",
@@ -93,6 +96,9 @@ export async function resolveUserConfig(
   ];
 }
 
+/**
+ * 设置UserConfig的默认值
+ */
 function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): RequiredUserConfig {
   const base = userConfig.base || "/";
   const srcDir = normalizePath(path.resolve(root, userConfig.srcDir || "."));
@@ -146,13 +152,11 @@ function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): Requ
 
 export async function resolveDoainConfig(root: string = process.cwd()): Promise<DoainConfig> {
   const [userConfig, configPath, configDeps] = await resolveUserConfig(root);
-
   const userConfigWithDefaults = mergeUserConfigWithDefaults(userConfig, root);
   const clientConfig = resolveClientConfig(userConfigWithDefaults);
 
   return {
     ...userConfigWithDefaults,
-    root: normalizePath(root),
     configPath,
     configDeps,
     clientConfig,

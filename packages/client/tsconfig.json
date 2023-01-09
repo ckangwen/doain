@@ -2,8 +2,31 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "paths": {
+      "~toolkit": [
+        "./toolkit/index.ts",
+      ],
+      "~components": [
+        "./components/index.ts",
+      ],
+    },
     "types": []
   },
-  "include": ["./src/**/*.ts", "./src/**/*.d.ts", "./src/**/*.tsx", "./src/**/*.vue", "./*.ts", "./*.d.ts", "./app/*.ts"],
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.d.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.vue",
+    "./*.ts",
+    "./*.d.ts",
+    "./app/*.ts",
+    "./app/**/*.ts",
+    "./toolkit/**/*.ts",
+    "./toolkit/*.ts",
+    "./components/*.ts",
+    "./components/*.tsx",
+    "./components/**/*.ts",
+    "./components/**/*.tsx"
+  ],
   "exclude": ["node_modules"]
 }

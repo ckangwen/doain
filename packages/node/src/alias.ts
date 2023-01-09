@@ -13,9 +13,7 @@ const join = (...args: Parameters<typeof _join>) => {
 const currentDir = dirname(resolve(fileURLToPath(import.meta.url)));
 
 // node_modules/@doain/node/dist/cli.js -> node_modules/@doain/client/dist/app/index.js
-export const DIST_CLIENT_PATH = normalizePath(
-  resolve(currentDir, "../../client/dist/packages/client"),
-);
+export const DIST_CLIENT_PATH = normalizePath(resolve(currentDir, "../../client/dist"));
 export const APP_INDEX_PATH = normalizePath(join(DIST_CLIENT_PATH, "app/index.js"));
 export const APP_PATH = join(DIST_CLIENT_PATH, "app");
 
@@ -26,7 +24,7 @@ export const DEFAULT_THEME_DIR = join(DIST_CLIENT_PATH, "theme");
  * 根据是否启用`vite-plugin-pages`,`vite-plugin-vue-layouts`
  * 加载不同的router
  *
- * 如果这两个插件都不启用，则优先加载根目录`src/router/index`的默认导出的router
+ * 如果这两个插件都不启用，则优先加载`src/router/index`的默认导出的router
  */
 function getRouterPath(
   root: string,
@@ -52,18 +50,23 @@ function getRouterPath(
 }
 
 /**
- * 优先加载根目录`src/store/index`的默认导出的store
+ * 优先加载`src/store/index`的默认导出的store
  */
 function getStorePath(root: string) {
-  let storePath = join(DIST_CLIENT_PATH, "app/store/original.js");
-  const userStorePath = ["ts", "js"]
+  const defaultPath = join(DIST_CLIENT_PATH, "app/store/original.js");
+  const userPath = ["ts", "js"]
     .map((ext) => join(root, `src/store/index.${ext}`))
     .find(fs.pathExistsSync);
-  if (userStorePath) {
-    storePath = userStorePath;
-  }
+  return userPath || defaultPath;
+}
 
-  return storePath;
+function getRegisterAppPath(root: string) {
+  const defaultPath = join(DIST_CLIENT_PATH, "app/registerApp.js");
+  const userPath = ["ts", "js"]
+    .map((ext) => join(root, `src/registerApp.${ext}`))
+    .find(fs.pathExistsSync);
+
+  return userPath || defaultPath;
 }
 
 export function createClientAlias(config: DoainConfig): Alias[] {
@@ -78,6 +81,10 @@ export function createClientAlias(config: DoainConfig): Alias[] {
     {
       find: "~doain/store",
       replacement: getStorePath(root),
+    },
+    {
+      find: "~doain/registerApp",
+      replacement: getRegisterAppPath(root),
     },
   ];
 

@@ -7,6 +7,6 @@ export default defineConfig({
       inline: true,
     },
     setupFiles: ["./vitest.setup.ts"],
-    include: ["./__tests__/**/*.ts"],
+    include: ["./tests/**/*.ts"],
   },
 });

@@ -1,19 +1,16 @@
+import { AppLayout } from "~components";
+import "~doain/registerApp";
 import router from "~doain/router";
 import store from "~doain/store";
 
-import { createApp, defineComponent, h, onMounted } from "vue";
-import { RouterView } from "vue-router";
+import { createApp, defineComponent, h } from "vue";
 
 const inBrowser = typeof window !== "undefined";
 
 const DoainApp = defineComponent({
   name: "DoainApp",
   setup() {
-    onMounted(() => {
-      console.log("DoainApp mounted", router);
-    });
-
-    return () => h(RouterView);
+    return () => h(AppLayout);
   },
 });
 

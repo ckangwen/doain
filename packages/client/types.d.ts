@@ -18,6 +18,13 @@ declare module "virtual:generated-pages" {
   const routes: RouteRecordRaw[];
   export default routes;
 }
+
+declare module "virtual:generated-layouts" {
+  import type { RouteRecordRaw } from "vue-router";
+
+  export function setupLayouts(routes: RouteRecordRaw[]): RouteRecordRaw[];
+}
+
 declare module "~doain/router" {
   import type { Router } from "vue-router";
 
