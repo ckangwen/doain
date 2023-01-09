@@ -16,7 +16,10 @@ if (root) {
 
 if (!command || command === "dev") {
   const createDevServer = async () => {
-    const server = await createServer(root, argv);
+    const server = await createServer(root, argv, async () => {
+      await server.close();
+      await createDevServer();
+    });
     await server.listen();
     console.log();
     server.printUrls();

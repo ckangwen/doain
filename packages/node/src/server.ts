@@ -7,6 +7,7 @@ import { createDoainPlugin } from "./plugins";
 export async function createServer(
   root: string = process.cwd(),
   serverOptions: ServerOptions = {},
+  recreateServer?: () => Promise<void>,
 ) {
   const config = await resolveDoainConfig(root);
 
@@ -16,6 +17,6 @@ export async function createServer(
     root: config.srcDir,
     cacheDir: config.cacheDir,
     server: serverOptions,
-    plugins: [createDoainPlugin(config)],
+    plugins: [createDoainPlugin(config, recreateServer)],
   });
 }
