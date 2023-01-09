@@ -38,3 +38,23 @@ declare module "~doain/store" {
   const store: Pinia;
   export default store;
 }
+
+declare module "~doain/registerApp" {
+  import type { Pinia } from "pinia";
+  import type { App } from "vue";
+  import type { Router } from "vue-router";
+
+  interface Context {
+    app: App;
+    router: Router;
+    store: Pinia;
+  }
+
+  interface UserSetupOptions {
+    setup: () => void;
+    onAppReady: (context: Context) => void;
+  }
+
+  const options: Partial<UserSetupOptions>;
+  export default options;
+}

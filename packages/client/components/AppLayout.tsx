@@ -4,7 +4,7 @@ import { defineComponent } from "vue";
 import { RouterView } from "vue-router";
 
 export const AppLayout = defineComponent({
-  name: "AppLayout",
+  name: "DoainAppLayout",
   setup() {
     return () => (
       <ElConfigProvider locale={zhCn}>

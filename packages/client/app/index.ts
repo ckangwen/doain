@@ -1,5 +1,5 @@
 import { AppLayout } from "~components";
-import "~doain/registerApp";
+import userSetup from "~doain/registerApp";
 import router from "~doain/router";
 import store from "~doain/store";
 
@@ -10,6 +10,9 @@ const inBrowser = typeof window !== "undefined";
 const DoainApp = defineComponent({
   name: "DoainApp",
   setup() {
+    if (typeof userSetup.setup === "function") {
+      userSetup.setup();
+    }
     return () => h(AppLayout);
   },
 });
@@ -29,6 +32,14 @@ if (inBrowser) {
   }
   if (store) {
     app.use(store);
+  }
+
+  if (typeof userSetup.onAppReady === "function") {
+    userSetup.onAppReady({
+      app,
+      router,
+      store,
+    });
   }
 
   app.mount("#app");
