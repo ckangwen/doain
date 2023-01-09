@@ -13,7 +13,7 @@ import type { PluginOption } from "vite";
 import Pages from "vite-plugin-pages";
 import PageLayout from "vite-plugin-vue-layouts";
 
-import { APP_INDEX_PATH } from "./alias";
+import { APP_INDEX_PATH, createClientAlias } from "./alias";
 import type { DoainConfig } from "./config";
 import { MODULE_ID, MODULE_ID_VIRTUAL } from "./constants";
 import { cleanUrl } from "./helper";
@@ -31,6 +31,7 @@ const pagesOptions: BuiltPluginOption<"pages"> = {
 };
 const vueLayoutOptions: BuiltPluginOption<"pageLayout"> = {
   layoutsDirs: "src/layouts",
+  defaultLayout: "default",
   extensions: ["vue", "tsx"],
 };
 const unocssOptions: BuiltPluginOption<"unocss"> = {};
@@ -128,7 +129,11 @@ function doainPlugin(config: DoainConfig, recreateServer?: () => Promise<void>):
     },
     // 合并一些默认的配置
     config() {
-      const baseConfig = defineViteConfig({});
+      const baseConfig = defineViteConfig({
+        resolve: {
+          alias: createClientAlias(config),
+        },
+      });
 
       return userViteConfig ? mergeConfig(userViteConfig, baseConfig) : baseConfig;
     },
@@ -147,7 +152,6 @@ function doainPlugin(config: DoainConfig, recreateServer?: () => Promise<void>):
       return () => {
         server.middlewares.use(async (req, res, next) => {
           const url = req.url && cleanUrl(req.url);
-          console.log(req.url, url);
 
           if (url?.endsWith(".html")) {
             res.statusCode = 200;

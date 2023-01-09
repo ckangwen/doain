@@ -112,7 +112,6 @@ importers:
       '@charrue/schema-table-next': ^1.0.2
       '@charrue/toolkit': ^0.13.1
       '@charrue/vitest-service': ^0.0.2
-      '@doain/shared': workspace:*
       '@types/element-resize-detector': ^1.1.3
       '@types/qs': ^6.9.7
       '@vitejs/plugin-vue': ^4.0.0
@@ -121,6 +120,7 @@ importers:
       axios: ^0.26.1
       element-plus: ^2.1.11
       element-resize-detector: ^1.2.4
+      fast-glob: ^3.2.12
       jsdom: ^20.0.3
       mitt: ^3.0.0
       pinia: ^2.0.26
@@ -144,17 +144,16 @@ importers:
     devDependencies:
       '@charrue/toolkit': 0.13.1
       '@charrue/vitest-service': 0.0.2_jsdom@20.0.3
-      '@doain/shared': link:../shared
       '@types/element-resize-detector': 1.1.3
       '@types/qs': 6.9.7
       '@vitejs/plugin-vue': 4.0.0_vite@4.0.4+vue@3.2.45
       '@vitejs/plugin-vue-jsx': 2.1.1_vite@4.0.4+vue@3.2.45
+      fast-glob: 3.2.12
       jsdom: 20.0.3
       vite: 4.0.4
 
   packages/node:
     specifiers:
-      '@doain/shared': workspace:*
       '@types/debug': ^4.1.7
       '@types/fs-extra': ^9.0.13
       '@types/minimist': ^1.2.2
@@ -189,7 +188,6 @@ importers:
       vite-plugin-pages: 0.27.1_vite@4.0.4
       vite-plugin-vue-layouts: 0.7.0_vite@4.0.4
     devDependencies:
-      '@doain/shared': link:../shared
       '@types/debug': 4.1.7
       '@types/fs-extra': 9.0.13
       '@types/minimist': 1.2.2
@@ -209,16 +207,6 @@ importers:
     devDependencies:
       '@doain/client': link:../client
       '@doain/node': link:../node
-
-  packages/shared:
-    specifiers:
-      '@charrue/toolkit': ^0.13.1
-      '@types/lodash-es': ^4.17.6
-      lodash-es: ^4.17.21
-    devDependencies:
-      '@charrue/toolkit': 0.13.1
-      '@types/lodash-es': 4.17.6
-      lodash-es: 4.17.21
 
 packages:
 
@@ -1219,9 +1207,11 @@ packages:
     resolution: {integrity: sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg==}
     dependencies:
       '@types/lodash': 4.14.191
+    dev: false
 
   /@types/lodash/4.14.191:
     resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
+    dev: false
 
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
@@ -1232,6 +1222,7 @@ packages:
 
   /@types/node/17.0.45:
     resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
+    dev: true
 
   /@types/node/18.11.18:
     resolution: {integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==}
@@ -1605,7 +1596,7 @@ packages:
       '@unocss/scope': 0.45.30
       '@unocss/transformer-directives': 0.45.30
       magic-string: 0.26.7
-      vite: 4.0.4_arwryhsn4zwmtf5pq2mmdxlt6a
+      vite: 4.0.4
     transitivePeerDependencies:
       - rollup
 
@@ -3651,6 +3642,7 @@ packages:
 
   /immutable/4.2.2:
     resolution: {integrity: sha512-fTMKDwtbvO5tldky9QZ2fMX7slR0mYpY5nbnFWYp0fOzDhHqhgIw9KoYgxLWsoNTS9ZHGauHj18DTyEw6BK3Og==}
+    dev: true
 
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -4102,6 +4094,7 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
 
   /lodash-unified/1.0.3_3ib2ivapxullxkx3xftsimdk7u:
     resolution: {integrity: sha512-WK9qSozxXOD7ZJQlpSqOT+om2ZfcT4yO+03FuzAHD0wF6S0l0090LRPDx3vhTTLZ8cFKpBn+IOcVXK6qOcIlfQ==}
@@ -4995,6 +4988,7 @@ packages:
       chokidar: 3.5.3
       immutable: 4.2.2
       source-map-js: 1.0.2
+    dev: true
 
   /saxes/6.0.0:
     resolution: {integrity: sha512-xAg7SOnEhrm5zI3puOOKyy1OMcMlIJZYNJY7xLBwSze0UjhPLnWfj2GF2EpT0jmzaJKIWKHLsaSSajf35bcYnA==}
@@ -5729,7 +5723,7 @@ packages:
       kolorist: 1.6.0
       sirv: 2.0.2
       ufo: 1.0.1
-      vite: 4.0.4_arwryhsn4zwmtf5pq2mmdxlt6a
+      vite: 4.0.4
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -5912,6 +5906,7 @@ packages:
       sass: 1.57.1
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
 
   /vitest/0.26.3:
     resolution: {integrity: sha512-FmHxU9aUCxTi23keF3vxb/Qp0lYXaaJ+jRLGOUmMS3qVTOJvgGE+f1VArupA6pEhaG2Ans4X+zV9dqM5WISMbg==}
