@@ -5,6 +5,8 @@ import store from "~doain/store";
 
 import { createApp, defineComponent, h } from "vue";
 
+import "./globals";
+
 const inBrowser = typeof window !== "undefined";
 
 const DoainApp = defineComponent({

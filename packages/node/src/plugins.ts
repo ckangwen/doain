@@ -1,12 +1,10 @@
 /* eslint-disable max-statements */
-import vuePlugin from "@vitejs/plugin-vue";
 import vueJsxPlugin from "@vitejs/plugin-vue-jsx";
 import { relative } from "path";
 import c from "picocolors";
-import VisualizerPlugin from "rollup-plugin-visualizer";
+import _VisualizerPlugin from "rollup-plugin-visualizer";
 import UnocssPlugin from "unocss/vite";
 import AutoImportPlugin from "unplugin-auto-import/vite";
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import VueComponentsPlugin from "unplugin-vue-components/vite";
 import { defineConfig as defineViteConfig, mergeConfig } from "vite";
 import type { PluginOption } from "vite";
@@ -17,59 +15,23 @@ import { APP_INDEX_PATH, createClientAlias } from "./alias";
 import type { DoainConfig } from "./config";
 import { MODULE_ID, MODULE_ID_VIRTUAL } from "./constants";
 import { cleanUrl } from "./helper";
+import { createVirtualDoainContent } from "./virtual";
 
-type BuiltPluginName = keyof NonNullable<DoainConfig["builtPlugins"]>;
-type BuiltPluginOption<T extends BuiltPluginName> = NonNullable<
-  NonNullable<DoainConfig["builtPlugins"]>[T]
->;
-const vueOptions: BuiltPluginOption<"vue"> = {};
-const vueJsxOptions: BuiltPluginOption<"vueJsx"> = {};
-const pagesOptions: BuiltPluginOption<"pages"> = {
-  dirs: "src/modules",
-  extensions: ["vue", "tsx"],
-  exclude: ["**/components/*.vue", "**/!(index).tsx"],
-};
-const vueLayoutOptions: BuiltPluginOption<"pageLayout"> = {
-  layoutsDirs: "src/layouts",
-  defaultLayout: "default",
-  extensions: ["vue", "tsx"],
-};
-const unocssOptions: BuiltPluginOption<"unocss"> = {};
-const autoImportOptions: BuiltPluginOption<"autoImport"> = {};
-const vueComponentsOptions: BuiltPluginOption<"vueComponents"> = {
-  dirs: ["src/components"],
-  extensions: ["vue", "tsx"],
-  resolvers: [ElementPlusResolver()],
-};
-const visualizerOptions: NonNullable<DoainConfig["builtPlugins"]>["visualizer"] = {};
+const VisualizerPlugin = (_VisualizerPlugin as any).default || _VisualizerPlugin;
 
-export function createDoainPlugin(
+export async function createDoainPlugin(
   config: DoainConfig,
   recreateServer?: () => Promise<void>,
-): PluginOption {
-  const {
-    vue = vueOptions,
-    vueJsx = vueJsxOptions,
-    pages = pagesOptions,
-    pageLayout = vueLayoutOptions,
-    unocss = unocssOptions,
-    autoImport = autoImportOptions,
-    vueComponents = vueComponentsOptions,
-    visualizer = visualizerOptions,
-  } = config.builtPlugins || {};
+): Promise<PluginOption> {
+  const { vue, vueJsx, pages, pageLayout, unocss, autoImport, vueComponents, visualizer } =
+    config.builtPlugins || {};
 
   const plugins: PluginOption[] = [];
 
-  // lazy require plugin-vue to respect NODE_ENV in @vue/compiler-x
-  // const vuePlugin = await import('@vitejs/plugin-vue').then((r) =>
-  //   r.default({
-  //     include: [/\.vue$/, /\.md$/],
-  //     ...userVuePluginOptions
-  //   })
-  // )
-
   if (vue) {
-    plugins.push(vuePlugin(vue));
+    // lazy require plugin-vue to respect NODE_ENV in @vue/compiler-x
+    const vuePlugin = await import("@vitejs/plugin-vue").then((r) => r.default(vue));
+    plugins.push(vuePlugin);
   }
   if (vueJsx) {
     plugins.push(vueJsxPlugin(vueJsx));
@@ -102,7 +64,7 @@ export function createDoainPlugin(
 }
 
 function doainPlugin(config: DoainConfig, recreateServer?: () => Promise<void>): PluginOption {
-  const { configPath, configDeps, vite: userViteConfig, clientConfig } = config;
+  const { configPath, configDeps, vite: userViteConfig } = config;
   return {
     name: "doain",
 
@@ -123,7 +85,7 @@ function doainPlugin(config: DoainConfig, recreateServer?: () => Promise<void>):
      */
     load(id) {
       if (id === MODULE_ID_VIRTUAL) {
-        return `export default JSON.parse(${JSON.stringify(JSON.stringify(clientConfig))})`;
+        return createVirtualDoainContent(config);
       }
       return null;
     },

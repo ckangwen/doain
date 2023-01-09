@@ -53,7 +53,6 @@ interface RequiredUserConfig
 export interface DoainConfig extends RequiredUserConfig {
   configPath: string | undefined;
   configDeps: string[];
-  clientConfig: DoainClientConfig;
 }
 
 export type RawConfigExports = Awaitable<UserConfig> | (() => Awaitable<UserConfig>);
@@ -129,7 +128,10 @@ function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): Requ
       extensions: ["vue", "tsx"],
     }),
     unocss: mergeBuiltPluginOptions("unocss", {}),
-    autoImport: mergeBuiltPluginOptions("autoImport", {}),
+    autoImport: mergeBuiltPluginOptions("autoImport", {
+      include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
+      imports: ["vue", "@vueuse/core"],
+    }),
     vueComponents: mergeBuiltPluginOptions("vueComponents", {
       dirs: ["src/components"],
       extensions: ["vue", "tsx"],
@@ -153,19 +155,11 @@ function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): Requ
 export async function resolveDoainConfig(root: string = process.cwd()): Promise<DoainConfig> {
   const [userConfig, configPath, configDeps] = await resolveUserConfig(root);
   const userConfigWithDefaults = mergeUserConfigWithDefaults(userConfig, root);
-  const clientConfig = resolveClientConfig(userConfigWithDefaults);
 
   return {
     ...userConfigWithDefaults,
     configPath,
     configDeps,
-    clientConfig,
-  };
-}
-
-export function resolveClientConfig(userConfig: RequiredUserConfig): DoainClientConfig {
-  return {
-    builtPlugins: userConfig.builtPlugins,
   };
 }
 

@@ -17,6 +17,6 @@ export async function createServer(
     root: config.srcDir,
     cacheDir: config.cacheDir,
     server: serverOptions,
-    plugins: [createDoainPlugin(config, recreateServer)],
+    plugins: [await createDoainPlugin(config, recreateServer)],
   });
 }
