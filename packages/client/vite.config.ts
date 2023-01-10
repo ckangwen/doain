@@ -9,7 +9,7 @@ import pkg from "./package.json";
 
 const external = Object.keys(pkg.dependencies || {});
 
-const routerFiles = fg.sync(["./app/router/*.ts", "./app/store/*.ts"]);
+const routerFiles = fg.sync(["./app/router/*.ts", "./app/store/*.ts", "./app/unocss/*.ts"]);
 export default defineConfig({
   plugins: [
     vue(),
@@ -39,7 +39,7 @@ export default defineConfig({
       formats: ["es"],
     },
     rollupOptions: {
-      external: [...external, /^virtual:/, "~pages", /^~doain\//],
+      external: [...external, /^virtual:/, "uno.css", "~pages", /^~doain\//],
       output: {
         preserveModules: true,
         preserveModulesRoot: ".",

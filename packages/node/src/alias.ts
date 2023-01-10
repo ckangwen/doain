@@ -67,10 +67,16 @@ function getRegisterAppPath(root: string) {
 
   return userPath || defaultPath;
 }
+function getUnocssPath(unocss: DoainConfig["builtPlugins"]["unocss"]) {
+  if (unocss === false) {
+    return join(DIST_CLIENT_PATH, "app/unocss/disable.js");
+  }
+  return join(DIST_CLIENT_PATH, "app/unocss/enable.js");
+}
 
 export function createClientAlias(config: DoainConfig): Alias[] {
   const { root, builtPlugins } = config;
-  const { pages, pageLayout } = builtPlugins;
+  const { pages, pageLayout, unocss } = builtPlugins;
 
   const alias = [
     {
@@ -84,6 +90,10 @@ export function createClientAlias(config: DoainConfig): Alias[] {
     {
       find: "~doain/registerApp",
       replacement: getRegisterAppPath(root),
+    },
+    {
+      find: "~doain/unocss",
+      replacement: getUnocssPath(unocss),
     },
   ];
 

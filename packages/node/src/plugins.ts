@@ -13,9 +13,7 @@ import PageLayout from "vite-plugin-vue-layouts";
 
 import { APP_INDEX_PATH, createClientAlias } from "./alias";
 import type { DoainConfig } from "./config";
-import { MODULE_ID, MODULE_ID_VIRTUAL } from "./constants";
 import { cleanUrl } from "./helper";
-import { createVirtualDoainContent } from "./virtual";
 
 const VisualizerPlugin = (_VisualizerPlugin as any).default || _VisualizerPlugin;
 
@@ -45,9 +43,6 @@ export async function createDoainPlugin(
   if (unocss) {
     plugins.push(UnocssPlugin(unocss));
   }
-  if (unocss) {
-    plugins.push(UnocssPlugin(unocss));
-  }
   if (autoImport) {
     plugins.push(AutoImportPlugin(autoImport));
   }
@@ -68,27 +63,6 @@ function doainPlugin(config: DoainConfig, recreateServer?: () => Promise<void>):
   return {
     name: "doain",
 
-    /**
-     * 可以自定义第三方依赖的解析
-     * https://rollupjs.org/guide/en/#resolveid
-     */
-    resolveId(importee) {
-      if (importee === MODULE_ID) {
-        return MODULE_ID_VIRTUAL;
-      }
-      return null;
-    },
-    /**
-     * 在resolveId之后执行
-     * 定义了一个自定义的加载器
-     * https://rollupjs.org/guide/en/#load
-     */
-    load(id) {
-      if (id === MODULE_ID_VIRTUAL) {
-        return createVirtualDoainContent(config);
-      }
-      return null;
-    },
     // 合并一些默认的配置
     config() {
       const baseConfig = defineViteConfig({

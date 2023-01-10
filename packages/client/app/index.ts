@@ -2,6 +2,7 @@ import { AppLayout } from "~components";
 import userSetup from "~doain/registerApp";
 import router from "~doain/router";
 import store from "~doain/store";
+import "~doain/unocss";
 
 import { createApp, defineComponent, h } from "vue";
 

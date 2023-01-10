@@ -63,3 +63,13 @@ declare module "~doain/registerApp" {
   const options: Partial<UserSetupOptions>;
   export default options;
 }
+
+declare module "uno.css" {
+  const content: any;
+  export default content;
+}
+
+declare module "~doain/unocss" {
+  const content: any;
+  export default content;
+}
