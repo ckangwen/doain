@@ -32,6 +32,8 @@
     "@types/debug": "^4.1.7",
     "@types/fs-extra": "^9.0.13",
     "@types/minimist": "^1.2.2",
+    "@unocss/vite": "^0.48.3",
+    "rollup": "^3.9.1",
     "type-fest": "^3.5.1"
   },
   "scripts": {

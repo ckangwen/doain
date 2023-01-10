@@ -12,7 +12,6 @@ const join = (...args: Parameters<typeof _join>) => {
 
 const currentDir = dirname(resolve(fileURLToPath(import.meta.url)));
 
-// node_modules/@doain/node/dist/cli.js -> node_modules/@doain/client/dist/app/index.js
 export const DIST_CLIENT_PATH = normalizePath(resolve(currentDir, "../../client/dist"));
 export const APP_INDEX_PATH = normalizePath(join(DIST_CLIENT_PATH, "app/index.js"));
 export const APP_PATH = join(DIST_CLIENT_PATH, "app");

@@ -23,3 +23,5 @@ export type DeepRequired<T> = T extends Primitive
         ? DeepRequired<U2>
         : DeepRequired<T[P]>;
     };
+
+export const isObj = (val: unknown): val is Record<string, unknown> => typeof val === "object";

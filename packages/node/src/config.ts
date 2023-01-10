@@ -1,3 +1,4 @@
+import type { VitePluginConfig as UnocssPluginOptions } from "@unocss/vite";
 import type { Options as VuePluginOptions } from "@vitejs/plugin-vue";
 import type { Options as VueJsxPluginOptions } from "@vitejs/plugin-vue-jsx";
 import fs from "fs-extra";
@@ -5,11 +6,11 @@ import path from "path";
 import c from "picocolors";
 import type { PluginVisualizerOptions } from "rollup-plugin-visualizer";
 import type { SetRequired } from "type-fest";
-import type { VitePluginConfig as UnocssPluginOptions } from "unocss/vite";
 import AutoImportPlugin from "unplugin-auto-import/vite";
 import type { Options as VueComponentsOptions } from "unplugin-vue-components";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { UserConfigExport, loadConfigFromFile, normalizePath } from "vite";
+import type { BuildOptions } from "vite";
 import type { UserOptions as PagesPluginOptions } from "vite-plugin-pages";
 import type { UserOptions as PageLayoutPluginOptions } from "vite-plugin-vue-layouts";
 
@@ -31,6 +32,11 @@ interface BuiltPlugins {
   visualizer: PluginVisualizerOptions | false;
 }
 
+interface HtmlOptions {
+  title?: string;
+  description?: string;
+}
+
 export interface UserConfig {
   base?: string;
   root?: string;
@@ -39,6 +45,8 @@ export interface UserConfig {
   cacheDir?: string;
   builtPlugins?: Partial<BuiltPlugins>;
   vite?: UserConfigExport;
+  build?: BuildOptions;
+  html?: HtmlOptions;
 }
 
 export interface DoainClientConfig {
@@ -46,7 +54,10 @@ export interface DoainClientConfig {
 }
 
 interface RequiredUserConfig
-  extends SetRequired<UserConfig, "base" | "root" | "srcDir" | "outDir" | "cacheDir" | "vite"> {
+  extends SetRequired<
+    UserConfig,
+    "base" | "root" | "srcDir" | "outDir" | "cacheDir" | "vite" | "build" | "html"
+  > {
   builtPlugins: BuiltPlugins;
 }
 
@@ -99,7 +110,7 @@ export async function resolveUserConfig(
  * 设置UserConfig的默认值
  */
 function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): RequiredUserConfig {
-  const base = userConfig.base || "/";
+  const base = userConfig.base || "./";
   const srcDir = normalizePath(path.resolve(root, userConfig.srcDir || "."));
   const outDir = resolveFromDoain(root, userConfig.outDir || "dist");
   const cacheDir = resolveFromDoain(root, userConfig.cacheDir || "cache");
@@ -108,10 +119,12 @@ function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): Requ
 
   function mergeBuiltPluginOptions<N extends keyof BuiltPlugins>(
     name: N,
-    defaults: Record<string, any> = {},
-  ) {
-    if (userBuiltPlugins[name] === false) return false;
-    return { ...defaults, ...userBuiltPlugins[name] };
+    defaults: Partial<BuiltPlugins[N]> = {},
+  ): BuiltPlugins[N] {
+    const pluginOptions = userBuiltPlugins[name];
+    // 如果传入false，则表示禁用该插件
+    if (pluginOptions === false) return false;
+    return { ...defaults, ...(pluginOptions || {}) };
   }
 
   const builtPlugins: BuiltPlugins = {
@@ -140,6 +153,8 @@ function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): Requ
     visualizer: mergeBuiltPluginOptions("visualizer", {}),
   };
   const viteOptions: UserConfigExport = {};
+  const buildOptions: BuildOptions = {};
+  const htmlOptions: HtmlOptions = {};
 
   return {
     root,
@@ -149,6 +164,8 @@ function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): Requ
     cacheDir,
     builtPlugins,
     vite: viteOptions,
+    build: buildOptions,
+    html: htmlOptions,
   };
 }
 
