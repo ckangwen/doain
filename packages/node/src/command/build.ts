@@ -1,13 +1,14 @@
 // import ora from "ora";
+import escape from "escape-html";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 import c from "picocolors";
 import type { OutputAsset, OutputChunk, RollupOutput } from "rollup";
-import { createLogger, build as viteBuild } from "vite";
+import { createLogger, transformWithEsbuild, build as viteBuild } from "vite";
 import type { UserConfig as ViteUserConfig } from "vite";
 
 import { APP_INDEX_PATH } from "../alias";
-import { DoainConfig, resolveDoainConfig } from "../config";
+import { DoainConfig, HeadConfig, resolveDoainConfig } from "../config";
 import { createDoainPlugin } from "../plugins";
 
 export const failMark = "\x1b[31m✖\x1b[0m";
@@ -65,55 +66,66 @@ export async function build(root: string, argv: any) {
   console.log(c.green("building finished!"));
 }
 
-function renderIndexPage(config: DoainConfig, appChunk: OutputChunk, cssChunk: OutputAsset) {
-  function getHtmlContent(options: {
-    lang?: string;
-    preloadLinksString?: string;
-    prefetchLinkString?: string;
-    content?: string;
-    inlinedScript?: string;
-    head?: string;
-  }) {
-    const {
-      lang = "",
-      head,
-      preloadLinksString = "",
-      prefetchLinkString = "",
-      content = "",
-      inlinedScript = "",
-    } = options;
+async function renderIndexPage(config: DoainConfig, appChunk: OutputChunk, cssChunk: OutputAsset) {
+  const stylesheetLink = cssChunk?.fileName
+    ? `<link rel="preload stylesheet" href="${config.base}${cssChunk.fileName}" as="style">`
+    : "";
 
-    const stylesheetLink = cssChunk
-      ? `<link rel="preload stylesheet" href="${config.base}${cssChunk.fileName}" as="style">`
-      : "";
+  const head = config.html.head ? await renderHead(config.html.head) : "";
 
-    return `
+  let htmlContent = `
     <!DOCTYPE html>
-    <html lang="${lang}">
+    <html lang="zh-CN">
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>${config.html.title}</title>
-        <meta name="description" content="${config.html.description}">
+        <title>${config.html.title || ""}</title>
+        <meta name="description" content="${config.html.description || ""}">
         ${stylesheetLink}
-        ${preloadLinksString}
-        ${prefetchLinkString}
         ${head}
       </head>
       <body>
-        <div id="app">${content}</div>
+        <div id="app">${config.html.content || ""}</div>
         ${
           appChunk
             ? `<script type="module" async src="${config.base}${appChunk.fileName}"></script>`
             : ``
         }
-        ${inlinedScript}
+        ${config.html.inlinedScript || ""}
       </body>
     </html>`.trim();
-  }
 
   const htmlFilePath = resolve(config.outDir, "index.html");
-  // transformHtml
+  if (config.html.transformHtml) {
+    htmlContent = await config.html.transformHtml(htmlContent, config);
+  }
 
-  writeFileSync(htmlFilePath, getHtmlContent({}), "utf-8");
+  writeFileSync(htmlFilePath, htmlContent, "utf-8");
+}
+
+function renderHead(head: HeadConfig[]): Promise<string> {
+  return Promise.all(
+    head.map(async ([tag, attrs = {}, innerHTML = ""]) => {
+      const openTag = `<${tag}${renderAttrs(attrs)}>`;
+      if (tag !== "link" && tag !== "meta") {
+        if (tag === "script" && (attrs.type === undefined || attrs.type.includes("javascript"))) {
+          innerHTML = (
+            await transformWithEsbuild(innerHTML, "inline-script.js", {
+              minify: true,
+            })
+          ).code.trim();
+        }
+        return `${openTag}${innerHTML}</${tag}>`;
+      }
+      return openTag;
+    }),
+  ).then((tags) => tags.join("\n  "));
+}
+
+function renderAttrs(attrs: Record<string, string>): string {
+  return Object.keys(attrs)
+    .map((key) => {
+      return ` ${key}="${escape(attrs[key])}"`;
+    })
+    .join("");
 }

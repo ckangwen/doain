@@ -88,12 +88,14 @@ importers:
   packages/node:
     specifiers:
       '@types/debug': ^4.1.7
+      '@types/escape-html': ^1.0.2
       '@types/fs-extra': ^9.0.13
       '@types/minimist': ^1.2.2
       '@unocss/vite': ^0.48.3
       '@vitejs/plugin-vue': ^4.0.0
       '@vitejs/plugin-vue-jsx': ^2.1.1
       debug: ^4.3.4
+      escape-html: ^1.0.3
       fs-extra: ^11.1.0
       minimist: ^1.2.7
       picocolors: ^1.0.0
@@ -124,9 +126,11 @@ importers:
       vite-plugin-vue-layouts: 0.7.0_vite@4.0.4
     devDependencies:
       '@types/debug': 4.1.7
+      '@types/escape-html': 1.0.2
       '@types/fs-extra': 9.0.13
       '@types/minimist': 1.2.2
       '@unocss/vite': 0.48.3_rollup@3.9.1+vite@4.0.4
+      escape-html: 1.0.3
       rollup: 3.9.1
       type-fest: 3.5.1
 
@@ -1163,6 +1167,10 @@ packages:
 
   /@types/element-resize-detector/1.1.3:
     resolution: {integrity: sha512-rqmeHxzNMPar/3IbdQRm+mydv8KlEXUtcp5M47rbZUEjslTjg+bT5+OXCknTCIy1AfvNR0Kio44iMY2zUH65CQ==}
+    dev: true
+
+  /@types/escape-html/1.0.2:
+    resolution: {integrity: sha512-gaBLT8pdcexFztLSPRtriHeXY/Kn4907uOCZ4Q3lncFBkheAWOuNt53ypsF8szgxbEJ513UeBzcf4utN0EzEwA==}
     dev: true
 
   /@types/estree/1.0.0:
@@ -2691,7 +2699,6 @@ packages:
 
   /escape-html/1.0.3:
     resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
-    dev: false
 
   /escape-string-regexp/1.0.5:
     resolution: {integrity: sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==}

@@ -32,9 +32,17 @@ interface BuiltPlugins {
   visualizer: PluginVisualizerOptions | false;
 }
 
+export type HeadConfig =
+  | [string, Record<string, string>]
+  | [string, Record<string, string>, string];
+
 interface HtmlOptions {
   title?: string;
   description?: string;
+  head?: HeadConfig[];
+  content?: string;
+  inlinedScript?: string;
+  transformHtml?: (content: string, config: DoainConfig) => Promise<string>;
 }
 
 export interface UserConfig {
@@ -53,7 +61,7 @@ export interface DoainClientConfig {
   builtPlugins: BuiltPlugins;
 }
 
-interface RequiredUserConfig
+export interface RequiredUserConfig
   extends SetRequired<
     UserConfig,
     "base" | "root" | "srcDir" | "outDir" | "cacheDir" | "vite" | "build" | "html"
@@ -66,7 +74,7 @@ export interface DoainConfig extends RequiredUserConfig {
   configDeps: string[];
 }
 
-export type RawConfigExports = Awaitable<UserConfig> | (() => Awaitable<UserConfig>);
+type RawConfigExports = Awaitable<UserConfig> | (() => Awaitable<UserConfig>);
 
 function resolveFromDoain(root: string, file: string) {
   return normalizePath(path.resolve(root, `.${APP_NAME}`, file));
