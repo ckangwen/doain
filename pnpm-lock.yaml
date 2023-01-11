@@ -85,6 +85,14 @@ importers:
       vite: 4.0.4_sass@1.57.1
       vite-plugin-dts: 1.7.1_vite@4.0.4
 
+  packages/doain:
+    specifiers:
+      '@doain/client': workspace:latest
+      '@doain/node': workspace:latest
+    dependencies:
+      '@doain/client': link:../client
+      '@doain/node': link:../node
+
   packages/node:
     specifiers:
       '@types/compression': ^1.7.2
