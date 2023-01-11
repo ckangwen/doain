@@ -14,6 +14,7 @@
   },
   "scripts": {
     "dev": "doain",
-    "build": "doain build"
+    "build": "doain build",
+    "preview": "doain preview"
   }
 }

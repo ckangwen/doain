@@ -12,11 +12,14 @@
   "dependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^2.1.1",
+    "compression": "^1.7.4",
     "debug": "^4.3.4",
     "fs-extra": "^11.1.0",
     "minimist": "^1.2.7",
     "picocolors": "^1.0.0",
+    "polka": "1.0.0-next.22",
     "rollup-plugin-visualizer": "^5.9.0",
+    "sirv": "^2.0.2",
     "unocss": "^0.48.3",
     "unplugin-auto-import": "^0.11.4",
     "unplugin-vue-components": "^0.22.9",
@@ -29,6 +32,7 @@
     "doain": "bin/doain.js"
   },
   "devDependencies": {
+    "@types/compression": "^1.7.2",
     "@types/debug": "^4.1.7",
     "@types/escape-html": "^1.0.2",
     "@types/fs-extra": "^9.0.13",
