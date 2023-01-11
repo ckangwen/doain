@@ -55,6 +55,7 @@ export interface UserConfig {
   vite?: UserConfigExport;
   build?: BuildOptions;
   html?: HtmlOptions;
+  buildEnd?: (config: DoainConfig) => Promise<void>;
 }
 
 export interface DoainClientConfig {
@@ -67,6 +68,7 @@ export interface RequiredUserConfig
     "base" | "root" | "srcDir" | "outDir" | "cacheDir" | "vite" | "build" | "html"
   > {
   builtPlugins: BuiltPlugins;
+  buildEnd?: (config: DoainConfig) => Promise<void>;
 }
 
 export interface DoainConfig extends RequiredUserConfig {
@@ -174,6 +176,7 @@ function mergeUserConfigWithDefaults(userConfig: UserConfig, root: string): Requ
     vite: viteOptions,
     build: buildOptions,
     html: htmlOptions,
+    buildEnd: userConfig.buildEnd,
   };
 }
 

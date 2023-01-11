@@ -16,6 +16,7 @@ export const okMark = "\x1b[32m✓\x1b[0m";
 
 export async function build(root: string, argv: any) {
   const config = await resolveDoainConfig(root);
+  const start = Date.now();
   const logLevel = "info";
 
   console.log(c.cyan("start building..."));
@@ -63,7 +64,11 @@ export async function build(root: string, argv: any) {
     process.exit(1);
   }
 
-  console.log(c.green("building finished!"));
+  if (config.buildEnd) {
+    await config.buildEnd(config);
+  }
+
+  console.log(`build complete in ${((Date.now() - start) / 1000).toFixed(2)}s.`);
 }
 
 async function renderIndexPage(config: DoainConfig, appChunk: OutputChunk, cssChunk: OutputAsset) {
