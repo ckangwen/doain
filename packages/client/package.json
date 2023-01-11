@@ -1,13 +1,32 @@
 {
   "name": "@doain/client",
   "version": "0.3.0",
+  "description": "doain客户端,主要提供项目入口,工具函数以及内部组件",
+  "keywords": [
+    "doain",
+    "admin-management",
+    "element-plus",
+    "vue3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckangwen/doain",
+    "directory": "packages/client"
+  },
+  "license": "MIT",
+  "author": "ckangwen",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
     "README.md"
   ],
-  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build",
+    "test": "vitest"
+  },
   "dependencies": {
     "@charrue/layout-next": "^1.0.1",
     "@charrue/schema-form-next": "^1.0.0",
@@ -36,9 +55,8 @@
     "vite": "^4.0.3",
     "vite-plugin-dts": "^1.7.1"
   },
-  "scripts": {
-    "test": "vitest",
-    "dev": "vite build",
-    "build": "vite build"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

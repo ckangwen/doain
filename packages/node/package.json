@@ -1,14 +1,36 @@
 {
   "name": "@doain/node",
   "version": "0.3.0",
+  "description": "doain的Node端,主要提供运行命令",
+  "keywords": [
+    "doain",
+    "admin-management",
+    "element-plus",
+    "vue3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckangwen/doain",
+    "directory": "packages/node"
+  },
+  "license": "MIT",
+  "author": "ckangwen",
+  "type": "module",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "bin": {
+    "doain": "bin/doain.js"
+  },
   "files": [
     "dist",
     "bin",
     "README.md"
   ],
-  "type": "module",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup",
+    "test": "vitest"
+  },
   "dependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^2.1.1",
@@ -28,9 +50,6 @@
     "vite-plugin-pages": "^0.27.1",
     "vite-plugin-vue-layouts": "^0.7.0"
   },
-  "bin": {
-    "doain": "bin/doain.js"
-  },
   "devDependencies": {
     "@types/compression": "^1.7.2",
     "@types/debug": "^4.1.7",
@@ -42,9 +61,8 @@
     "rollup": "^3.9.1",
     "type-fest": "^3.5.1"
   },
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup",
-    "test": "vitest"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

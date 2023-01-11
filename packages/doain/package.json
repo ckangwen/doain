@@ -1,19 +1,36 @@
 {
   "name": "doain",
   "version": "0.3.0",
+  "description": "类Vitepress架构的后台管理系统的框架,将琐碎的配置与工具函数封装与内部",
+  "keywords": [
+    "doain",
+    "admin-management",
+    "element-plus",
+    "vue3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckangwen/doain",
+    "directory": "packages/client"
+  },
+  "license": "MIT",
+  "author": "ckangwen",
+  "type": "module",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "bin",
     "README.md"
   ],
-  "type": "module",
+  "scripts": {
+    "build": "tsup"
+  },
   "dependencies": {
     "@doain/client": "workspace:latest",
     "@doain/node": "workspace:latest"
   },
-  "scripts": {
-    "build": "tsup"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
