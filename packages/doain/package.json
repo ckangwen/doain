@@ -8,6 +8,9 @@
     "element-plus",
     "vue3"
   ],
+  "bin": {
+    "doain": "bin/doain.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ckangwen/doain",
