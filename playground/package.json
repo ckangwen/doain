@@ -1,0 +1,24 @@
+{
+  "name": "playground",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "doain build",
+    "dev": "doain",
+    "preview": "doain preview"
+  },
+  "dependencies": {
+    "@charrue/schema-form-next": "^1.0.0",
+    "@doain/toolkit": "workspace:*",
+    "pinia": "^2.0.26",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@charrue/toolkit": "^0.14.1",
+    "doain": "workspace:*",
+    "element-plus": "^2.1.11",
+    "sass": "^1.57.1"
+  }
+}
