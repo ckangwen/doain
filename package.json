@@ -6,22 +6,23 @@
     "dev:node": "pnpm --filter=@doain/node run dev",
     "dev:client": "pnpm --filter=@doain/client run dev",
     "dev:play": "pnpm --filter=playground run dev",
+    "build:toolkit": "pnpm --filter=@doain/toolkit run build",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "prettier": "prettier --write ./packages/**/*.{js,ts,tsx,css,scss,vue}"
   },
   "devDependencies": {
-    "@charrue/eslint-config-typescript": "latest",
-    "@charrue/eslint-config-vue3": "latest",
+    "@charrue/eslint-config-typescript": "^0.3.0",
+    "@charrue/eslint-config-vue3": "^0.2.0",
     "@trivago/prettier-plugin-sort-imports": "^4.0.0",
-    "@types/node": "^17.0.25",
-    "eslint": "^8.3.0",
+    "@types/node": "^17.0.45",
+    "eslint": "^8.32.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "npm-run-all": "^4.1.5",
     "postcss-sorting": "^6.0.0",
-    "prettier": "^2.8.1",
+    "prettier": "^2.8.3",
     "tsup": "^6.5.0",
-    "typescript": "^4.8.3",
+    "typescript": "^4.9.4",
     "vitest": "^0.26.3"
   }
 }

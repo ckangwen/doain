@@ -1,16 +1,30 @@
-import { getDoainConfig } from "~toolkit";
-
 import { defineStore, storeToRefs } from "pinia";
 import { ref } from "vue";
 
-import { createSessionStorage } from "../helpers/index";
+import { getDoainClientConfigKey, subscribeDoainClientConfigKey } from "../config";
+import { sStorage } from "../storage";
 
-const sStorage = createSessionStorage();
+let userFetchConfig = getDoainClientConfigKey("fetch");
+let userStorageConfig = getDoainClientConfigKey("store");
+subscribeDoainClientConfigKey("fetch", (config) => {
+  userFetchConfig = {
+    ...userFetchConfig,
+    ...config,
+  };
+});
+
+subscribeDoainClientConfigKey("store", (config) => {
+  userStorageConfig = {
+    ...userStorageConfig,
+    ...config,
+  };
+});
 
 const DefaultUserInfo = {
   username: "",
   userId: 0,
 };
+
 const USERINFO_SESSION_KEY = "userInfo";
 function getCachedUserInfo() {
   const cachedUserInfo = sStorage.get(USERINFO_SESSION_KEY);
@@ -22,8 +36,6 @@ function getCachedUserInfo() {
 }
 
 export const useUserStore = defineStore("appUser", () => {
-  const globalConfig = getDoainConfig();
-
   const userInfo = ref(getCachedUserInfo());
   // 是否已经加载过用户信息
   const loaded = ref(false);
@@ -38,14 +50,19 @@ export const useUserStore = defineStore("appUser", () => {
     if (!loaded.value) {
       loaded.value = true;
       refreshUserInfo(true);
+    }
+
+    if (!userFetchConfig.fetchUserInfo) {
+      console.warn("未配置 fetchUserInfo 方法");
       return;
     }
 
     if (force || !userInfo.value.userId) {
       loading.value = true;
-      const result = await globalConfig.fetch.fetchUserInfo();
+      const result = await userFetchConfig.fetchUserInfo();
+      loading.value = false;
       if (result) {
-        const requiredUserData = globalConfig.store.getRequiredUserData(result);
+        const requiredUserData = userStorageConfig.getRequiredUserData(result);
         userInfo.value = {
           ...requiredUserData,
           ...result,

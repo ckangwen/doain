@@ -1,5 +1,6 @@
-import { createLocalStorage, getDoainConfig } from "~toolkit";
+import userClientConfig from "~doain/clientConfig";
 
+import { lStorage } from "@doain/toolkit";
 import elementResizeDetectorMaker from "element-resize-detector";
 import { Ref, computed, nextTick, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -7,7 +8,6 @@ import { useRoute, useRouter } from "vue-router";
 import { NormalizedRouteData, formatNormalizedRoute } from "./shared";
 import { useNavigationTabStore } from "./useNavigationTabStore";
 
-const globalConfig = getDoainConfig();
 const SCROLL_AMPLITUDE = 20;
 const getTabKey = (routeFullPath: string) => `tag-${routeFullPath.split("/").join("-")}`;
 
@@ -154,7 +154,6 @@ const useNavigationTabEvents = (activeKey: Ref<string>) => {
 export const useNavigationTab = () => {
   const router = useRouter();
   const route = useRoute();
-  const lStorage = createLocalStorage();
   const currentNormalizedRoute = computed(() => formatNormalizedRoute(route));
 
   // 当前高亮的标签页
@@ -181,7 +180,12 @@ export const useNavigationTab = () => {
     const allRoutes = router.getRoutes();
 
     tabViewStore.init(
-      allRoutes.filter((item) => item.meta?.[globalConfig.layout.ignoreNavigationTabKey] !== false),
+      allRoutes.filter((item) => {
+        if (!userClientConfig?.layout?.ignoreNavigationTabKey) {
+          return true;
+        }
+        return item.meta?.[userClientConfig?.layout?.ignoreNavigationTabKey] !== false;
+      }),
     );
     tabViewStore.loadOpened(currentNormalizedRoute.value);
 
@@ -200,7 +204,8 @@ export const useNavigationTab = () => {
     });
 
     window.addEventListener("beforeunload", () => {
-      lStorage.set(globalConfig.layout.tabViewStorageName, JSON.stringify(tabViewStore.opened));
+      const storeName = userClientConfig?.layout?.tabViewStorageName || "tabView";
+      lStorage.set(storeName, JSON.stringify(tabViewStore.opened));
     });
   };
 

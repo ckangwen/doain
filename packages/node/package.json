@@ -18,9 +18,6 @@
   "type": "module",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
-  "bin": {
-    "doain": "bin/doain.js"
-  },
   "files": [
     "dist",
     "bin",

@@ -1,18 +1,16 @@
 /* eslint-disable max-len */
-import { createLocalStorage, getDoainConfig } from "~toolkit";
+import userClientConfig from "~doain/clientConfig";
 
-import { merge } from "@charrue/toolkit";
+import { simpleDeepMerge } from "@charrue/toolkit";
+import { lStorage } from "@doain/toolkit";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { RouteLocationNormalizedLoaded } from "vue-router";
 
 import { NormalizedRouteData, formatNormalizedRoute } from "./shared";
 
-const globalConfig = getDoainConfig();
-
 // 不需要出现在标签页中的路由
 // const whiteList: Array<NonNullable<NormalizedRouteData["name"]>> = ["Redirect", "login"];
-const lStorage = createLocalStorage();
 
 const parseStorageValue = (key: string, defaultValue?: any) => {
   try {
@@ -42,7 +40,7 @@ export const useNavigationTabStore = defineStore("GlobalNavigationTab", () => {
 
   const loadOpened = (defaultRoute?: NormalizedRouteData) => {
     let cachedRoutes: NormalizedRouteData[] = parseStorageValue(
-      globalConfig.layout.tabViewStorageName,
+      userClientConfig?.layout?.tabViewStorageName || "tabView",
       defaultRoute ? [defaultRoute] : [],
     );
 
@@ -53,7 +51,7 @@ export const useNavigationTabStore = defineStore("GlobalNavigationTab", () => {
         const matchedRoute = pool.value.find((r) => r.path === item.path);
         if (matchedRoute) {
           // 防止覆盖旧路由的query或params参数，而pool中的路由一般不会带有参数
-          return merge({}, item, matchedRoute);
+          return simpleDeepMerge(item, matchedRoute);
         }
         return null;
       })

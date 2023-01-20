@@ -16,12 +16,10 @@ export default defineConfig({
     vueJsx(),
     dts({
       exclude: ["./app/*", "./components/*"],
-      include: ["./toolkit/**/*.ts", "./toolkit/*.ts"],
     }),
   ],
   resolve: {
     alias: {
-      "~toolkit": resolve(__dirname, "toolkit/index.ts"),
       "~components": resolve(__dirname, "components/index.ts"),
     },
   },
@@ -31,8 +29,8 @@ export default defineConfig({
         "index.ts",
         "./app/index",
         "./app/registerApp",
+        "./app/client.config",
         "./components/index.ts",
-        "./toolkit/index.ts",
         ...routerFiles,
       ],
       name: "doain.client",

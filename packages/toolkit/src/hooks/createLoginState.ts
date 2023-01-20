@@ -1,10 +1,12 @@
-import { getDoainConfig, httpClient, setToken, useUserStore } from "~toolkit";
-
 import { isFn, isPromise } from "@charrue/toolkit";
-import { ElNotification } from "element-plus";
-import type { NotificationOptions } from "element-plus";
+import { ElNotification, NotificationOptions } from "element-plus";
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
+
+import { getDoainClientConfig } from "../config";
+import { httpClient } from "../request/index";
+import { useUserStore } from "../store/index";
+import { setToken } from "../token";
 
 type FormValue = Record<string, any>;
 
@@ -29,12 +31,12 @@ const showMessage = (type: NotificationOptions["type"], message: string) => {
 
 export const createLoginState = (options: CreateLoginStateOptions) => {
   const { createDefaultFormValue, createDisabledGetter, formatSubmitValue } = options;
-  const globalConfig = getDoainConfig();
-
-  const { homeRoute } = globalConfig.router;
-  const { getTokenAfterLogin, login } = globalConfig.fetch;
+  const globalConfig = getDoainClientConfig();
 
   return function useLogin({ afterLogin, beforeLogin }: UseLoginOptions) {
+    const getTokenAfterLogin = globalConfig?.fetch?.getTokenAfterLogin;
+    const loginApi = globalConfig?.fetch?.login;
+
     const router = useRouter();
     const userStore = useUserStore();
 
@@ -79,6 +81,11 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
 
     /** 登录成功 */
     const onSubmitSuc = async (data: FormValue, message: string) => {
+      if (!getTokenAfterLogin) {
+        console.error("请配置'fetch.getTokenAfterLogin'");
+        return;
+      }
+
       const token = isPromise(getTokenAfterLogin)
         ? await getTokenAfterLogin(data)
         : getTokenAfterLogin(data);
@@ -91,7 +98,9 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
       }
       userStore.refreshUserInfo(true);
 
-      router.push(homeRoute);
+      if (globalConfig?.router?.homeRoute) {
+        router.push(globalConfig.router.homeRoute);
+      }
     };
 
     /** 登录失败 */
@@ -117,9 +126,14 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
           }
         }
 
+        if (!loginApi) {
+          console.error("请配置'fetch.login'");
+          return;
+        }
+
         loading.value = true;
 
-        const { success, data, error, message } = await login(submitValue);
+        const { success, data, error, message } = await loginApi(submitValue);
         hideLoading();
 
         if (!success && error) {

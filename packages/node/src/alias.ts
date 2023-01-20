@@ -67,6 +67,16 @@ function getRegisterAppPath(root: string) {
 
   return userPath || defaultPath;
 }
+
+function getUserClientConfig(root: string) {
+  const defaultPath = join(DIST_CLIENT_PATH, "app/client.config.js");
+  const userPath = ["ts", "js"]
+    .map((ext) => join(root, `src/client.config.${ext}`))
+    .find(fs.pathExistsSync);
+
+  return userPath || defaultPath;
+}
+
 function getUnocssPath(unocss: DoainConfig["builtPlugins"]["unocss"]) {
   if (unocss === false) {
     return join(DIST_CLIENT_PATH, "app/unocss/disable.js");
@@ -94,6 +104,10 @@ export function createClientAlias(config: DoainConfig): Alias[] {
     {
       find: "~doain/unocss",
       replacement: getUnocssPath(unocss),
+    },
+    {
+      find: "~doain/clientConfig",
+      replacement: getUserClientConfig(root),
     },
   ];
 

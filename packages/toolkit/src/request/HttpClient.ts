@@ -5,7 +5,7 @@ import axios from "axios";
 import mitt from "mitt";
 import type { Emitter } from "mitt";
 
-import { getToken } from "../helpers/index";
+import { getToken } from "../token";
 import { FetchResponse } from "../types";
 import { getResponseData, stringifyData } from "./interceptors";
 

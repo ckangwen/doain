@@ -1,17 +1,17 @@
-import { getDoainConfig, subscribeDoainConfigKey } from "~toolkit";
-
+// import { subscribeDoainConfigKey } from "@doain/toolkit";
 import { defineComponent, ref } from "vue";
 import { RouterLink } from "vue-router";
 
 export const Default404 = defineComponent({
   name: "Default404",
   setup() {
-    const homeRoute = ref(getDoainConfig().router.homeRoute);
-    subscribeDoainConfigKey("router", (config) => {
-      if (config.homeRoute && homeRoute.value !== config.homeRoute) {
-        homeRoute.value = config.homeRoute;
-      }
-    });
+    const homeRoute = ref("/");
+    // const homeRoute = ref(userClientConfig.router.homeRoute || "/");
+    // subscribeDoainConfigKey("router", (config) => {
+    //   if (config.homeRoute && homeRoute.value !== config.homeRoute) {
+    //     homeRoute.value = config.homeRoute;
+    //   }
+    // });
 
     return {
       homeRoute,

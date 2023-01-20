@@ -28,21 +28,22 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@charrue/layout-next": "^1.0.1",
     "@charrue/schema-form-next": "^1.0.0",
     "@charrue/schema-table-next": "^1.0.2",
+    "@doain/toolkit": "workspace:latest",
     "@vueuse/core": "^9.6.0",
     "axios": "^0.26.1",
     "element-plus": "^2.1.11",
     "element-resize-detector": "^1.2.4",
     "mitt": "^3.0.0",
     "pinia": "^2.0.26",
+    "@charrue/layout-next": "^1.0.2",
+    "@charrue/toolkit": "^0.14.1",
     "qs": "^6.11.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
-    "@charrue/toolkit": "^0.13.1",
     "@charrue/vitest-service": "^0.0.2",
     "@types/element-resize-detector": "^1.1.3",
     "@types/qs": "^6.9.7",

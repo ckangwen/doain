@@ -1,19 +1,20 @@
 import { AppLayout } from "~components";
+import userClientConfig from "~doain/clientConfig";
 import userSetup from "~doain/registerApp";
 import router from "~doain/router";
 import store from "~doain/store";
 import "~doain/unocss";
 
+import { inBrowser } from "@charrue/toolkit";
+import { routerTokenGuard } from "@doain/toolkit";
 import { createApp, defineComponent, h } from "vue";
 
 import "./globals";
 
-const inBrowser = typeof window !== "undefined";
-
 const DoainApp = defineComponent({
   name: "DoainApp",
   setup() {
-    if (typeof userSetup.setup === "function") {
+    if (userSetup && typeof userSetup.setup === "function") {
       userSetup.setup();
     }
     return () => h(AppLayout);
@@ -32,12 +33,14 @@ if (inBrowser) {
   const { app } = createClientApp();
   if (router) {
     app.use(router);
+
+    routerTokenGuard(router, userClientConfig);
   }
   if (store) {
     app.use(store);
   }
 
-  if (typeof userSetup.onAppReady === "function") {
+  if (userSetup && typeof userSetup.onAppReady === "function") {
     userSetup.onAppReady({
       app,
       router,

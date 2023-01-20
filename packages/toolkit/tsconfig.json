@@ -7,10 +7,13 @@
         "./components/index.ts",
       ],
     },
-    "typeRoots": ["./typings", "./node_modules/@types"],
+    "types": []
   },
   "include": [
-    "./typings/*.d.ts",
+    "./src/**/*.ts",
+    "./src/**/*.d.ts",
+    "./src/**/*.tsx",
+    "./src/**/*.vue",
     "./*.ts",
     "./*.d.ts",
     "./app/*.ts",

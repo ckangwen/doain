@@ -1,5 +1,6 @@
-import { getDoainConfig, removeToken, useUserData, useUserStore } from "~toolkit";
+import userClientConfig from "~doain/clientConfig";
 
+import { removeToken, useUserData, useUserStore } from "@doain/toolkit";
 import { useFullscreen } from "@vueuse/core";
 import { ElDropdown, ElDropdownItem, ElDropdownMenu } from "element-plus";
 import { computed, defineComponent } from "vue";
@@ -15,9 +16,7 @@ const HeaderRight = defineComponent({
     const router = useRouter();
     const userStore = useUserStore();
     const userData = useUserData();
-    const config = getDoainConfig();
 
-    const { loginRoute } = config.router;
     const { isFullscreen, toggle: toggleFullscreen } = useFullscreen();
     const username = computed(() => userData.value.username);
 
@@ -25,7 +24,10 @@ const HeaderRight = defineComponent({
       removeToken();
       userStore.clearUserInfo();
 
-      router.push(loginRoute);
+      const loginRoute = userClientConfig?.router?.loginRoute;
+      if (loginRoute) {
+        router.push(loginRoute);
+      }
     };
 
     const onCommand = (command: UserAction) => {
