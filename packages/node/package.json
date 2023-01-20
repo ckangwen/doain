@@ -1,6 +1,6 @@
 {
   "name": "@doain/node",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "doain的Node端,主要提供运行命令",
   "keywords": [
     "doain",
