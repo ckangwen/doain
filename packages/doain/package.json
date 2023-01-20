@@ -8,26 +8,39 @@
     "element-plus",
     "vue3"
   ],
-  "bin": {
-    "doain": "bin/doain.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ckangwen/doain",
-    "directory": "packages/client"
+    "directory": "packages/doain"
   },
   "license": "MIT",
   "author": "ckangwen",
   "type": "module",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "require": "./index.cjs",
+      "import": "./index.js"
+    },
+    "./*": "./*",
+    "./config": {
+      "types": "./config.d.ts",
+      "require": "./config.cjs",
+      "import": "./config.js"
+    }
+  },
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "bin": {
+    "doain": "bin/doain.js"
+  },
   "files": [
     "dist",
-    "README.md"
+    "bin",
+    "*.d.ts",
+    "*.mjs",
+    "*.cjs"
   ],
-  "scripts": {
-    "build": "tsup"
-  },
   "dependencies": {
     "@doain/client": "workspace:latest",
     "@doain/node": "workspace:latest"
