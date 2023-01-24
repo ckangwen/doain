@@ -1,3 +1,5 @@
+import type { UserOptions as PagesPluginOptions } from "@charrue/vite-plugin-pages";
+import type { UserOptions as PageLayoutPluginOptions } from "@charrue/vite-plugin-vue-layouts";
 import type { VitePluginConfig as UnocssPluginOptions } from "@unocss/vite";
 import type { Options as VuePluginOptions } from "@vitejs/plugin-vue";
 import type { Options as VueJsxPluginOptions } from "@vitejs/plugin-vue-jsx";
@@ -11,8 +13,6 @@ import type { Options as VueComponentsOptions } from "unplugin-vue-components";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { UserConfigExport, loadConfigFromFile, normalizePath } from "vite";
 import type { BuildOptions } from "vite";
-import type { UserOptions as PagesPluginOptions } from "vite-plugin-pages";
-import type { UserOptions as PageLayoutPluginOptions } from "vite-plugin-vue-layouts";
 
 import { APP_NAME } from "./constants";
 import { Awaitable, createDebug } from "./helper";

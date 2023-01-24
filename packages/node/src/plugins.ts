@@ -1,4 +1,7 @@
 /* eslint-disable max-statements */
+import Pages from "@charrue/vite-plugin-pages";
+import { definePageRoutePlugin, resolveRouteBlock } from "@charrue/vite-plugin-pages-extend";
+import PageLayout from "@charrue/vite-plugin-vue-layouts";
 import vueJsxPlugin from "@vitejs/plugin-vue-jsx";
 import { relative } from "path";
 import c from "picocolors";
@@ -8,8 +11,6 @@ import AutoImportPlugin from "unplugin-auto-import/vite";
 import VueComponentsPlugin from "unplugin-vue-components/vite";
 import { defineConfig as defineViteConfig, mergeConfig } from "vite";
 import type { PluginOption } from "vite";
-import Pages from "vite-plugin-pages";
-import PageLayout from "vite-plugin-vue-layouts";
 
 import { APP_INDEX_PATH, createClientAlias } from "./alias";
 import type { DoainConfig } from "./config";
@@ -35,7 +36,13 @@ export async function createDoainPlugin(
     plugins.push(vueJsxPlugin(vueJsx));
   }
   if (pages) {
-    plugins.push(Pages(pages));
+    plugins.push(
+      Pages({
+        ...pages,
+        resolveRouteBlock,
+      }),
+    );
+    plugins.push(definePageRoutePlugin());
   }
   if (pageLayout) {
     plugins.push(PageLayout(pageLayout));

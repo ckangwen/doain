@@ -21,7 +21,8 @@
   "files": [
     "dist",
     "bin",
-    "README.md"
+    "README.md",
+    "global.d.ts"
   ],
   "scripts": {
     "build": "tsup",
@@ -29,6 +30,9 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@charrue/vite-plugin-pages": "^0.28.0",
+    "@charrue/vite-plugin-pages-extend": "^0.1.0",
+    "@charrue/vite-plugin-vue-layouts": "^0.8.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^2.1.1",
     "compression": "^1.7.4",
@@ -43,9 +47,7 @@
     "unplugin-auto-import": "^0.11.4",
     "unplugin-vue-components": "^0.22.9",
     "vite": "^4.0.3",
-    "vite-plugin-inspect": "^0.7.8",
-    "vite-plugin-pages": "^0.27.1",
-    "vite-plugin-vue-layouts": "^0.7.0"
+    "vite-plugin-inspect": "^0.7.8"
   },
   "devDependencies": {
     "@types/compression": "^1.7.2",
