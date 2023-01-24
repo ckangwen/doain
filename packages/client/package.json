@@ -20,7 +20,9 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "typings/index.d.ts",
+    "global.d.ts"
   ],
   "scripts": {
     "build": "vite build",

@@ -25,11 +25,6 @@ declare module "virtual:generated-layouts" {
   export function setupLayouts(routes: RouteRecordRaw[]): RouteRecordRaw[];
 }
 
-declare module "virtual:doain" {
-  const content: any;
-  export default content;
-}
-
 declare module "~doain/router" {
   import type { Router } from "vue-router";
 
