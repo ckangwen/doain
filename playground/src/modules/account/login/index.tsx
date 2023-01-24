@@ -3,6 +3,12 @@ import { ElButton, ElFormItem } from "element-plus";
 
 import { useLogin } from "./useLogin";
 
+definePageRoute({
+  meta: {
+    layout: "pure",
+  },
+});
+
 export default defineComponent({
   name: "Login",
   setup() {

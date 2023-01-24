@@ -2,11 +2,11 @@
   "name": "doain-root",
   "private": true,
   "scripts": {
-    "dev": "run-s dev:*",
-    "dev:node": "pnpm --filter=@doain/node run dev",
-    "dev:client": "pnpm --filter=@doain/client run dev",
-    "dev:play": "pnpm --filter=playground run dev",
+    "build": "run-s build:*",
+    "build:node": "pnpm --filter=@doain/node run dev",
+    "build:client": "pnpm --filter=@doain/client run dev",
     "build:toolkit": "pnpm --filter=@doain/toolkit run build",
+    "play": "pnpm --filter=playground run dev",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src",
     "prettier": "prettier --write ./packages/**/*.{js,ts,tsx,css,scss,vue}"
   },
