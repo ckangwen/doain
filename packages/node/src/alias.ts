@@ -70,9 +70,7 @@ export function getUserRegisterAppPath(root: string) {
 
 export function getUserClientConfigPath(root: string) {
   const defaultPath = join(DIST_CLIENT_PATH, "app/client.config.js");
-  const userPath = ["ts", "js"]
-    .map((ext) => join(root, `src/client.config.${ext}`))
-    .find(fs.pathExistsSync);
+  const userPath = ["ts", "js"].map((ext) => join(root, `.doainrc.${ext}`)).find(fs.pathExistsSync);
 
   return userPath || defaultPath;
 }

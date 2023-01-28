@@ -1,6 +1,6 @@
 import { defineClientConfig } from "@doain/toolkit";
 
-import { GlobalUserInfo, RawUserInfo } from "./types";
+import { GlobalUserInfo, RawUserInfo } from "./src/types";
 
 const APP_KEY = "playground";
 const LOGIN_URL = "login";
