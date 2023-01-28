@@ -3,3 +3,9 @@ export interface FetchResponse<T = any> {
   message: string;
   status: number;
 }
+
+export interface DoainDefaultUserInfo {
+  username: string;
+  userId: number | string;
+  [key: string]: any;
+}

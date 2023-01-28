@@ -4,6 +4,7 @@ import type { RouteLocationRaw } from "vue-router";
 
 import { HttpClientResponse, httpClient } from "./request/index";
 import { lStorage, sStorage } from "./storage";
+import { DoainDefaultUserInfo } from "./types";
 
 type LayoutProps = InstanceType<typeof CharrueLayout>["$props"];
 
@@ -39,7 +40,7 @@ interface LayoutConfig {
 }
 
 interface StoreConfig<GlobalUserInfo> {
-  getRequiredUserData: (userInfo: GlobalUserInfo) => GlobalUserInfo;
+  formatUserData: (userInfo: unknown) => GlobalUserInfo;
 }
 
 interface FetchConfig {
@@ -98,7 +99,7 @@ interface RouterConfig {
   unloggedOnlyRoutes?: string[];
 }
 
-export interface DoainClientConfig<GlobalUserInfo = Record<string, any>> {
+export interface DoainClientConfig<GlobalUserInfo = DoainDefaultUserInfo> {
   app: AppConfig;
   layout: LayoutConfig;
   store: StoreConfig<GlobalUserInfo>;
@@ -109,24 +110,6 @@ export interface DoainClientConfig<GlobalUserInfo = Record<string, any>> {
 
 type ConfigKey = keyof DoainClientConfig;
 type DoainConfigValueOf<T extends ConfigKey> = DoainClientConfig[T];
-
-const DefaultLayoutConfig: LayoutConfig = {
-  logo: "",
-  title: "",
-  collapse: false,
-  layout: "mix",
-  sidebarWidth: [54, 200],
-  tabViewStorageName: "tabView",
-  ignoreNavigationTabKey: "navigationTab",
-  data: [],
-};
-
-const DefaultRouteConfig: RouterConfig = {
-  enableTokenAuth: false,
-  homeRoute: "/",
-  loginRoute: "/account/login",
-  unloggedOnlyRoutes: ["/account/login"],
-};
 
 interface Events extends Record<EventType, unknown> {
   "*": DoainClientConfig;
@@ -142,10 +125,23 @@ export const defaultDoainClientConfig: DoainClientConfig = {
     appKey: "",
     storageKey: "",
   },
-  layout: DefaultLayoutConfig,
+  layout: {
+    logo: "",
+    title: "",
+    collapse: false,
+    layout: "mix",
+    sidebarWidth: [54, 200],
+    tabViewStorageName: "tabView",
+    ignoreNavigationTabKey: "navigationTab",
+    data: [],
+    enableNavigationTab: false,
+  },
   store: {
-    getRequiredUserData() {
-      return {};
+    formatUserData() {
+      return {
+        username: "",
+        userId: 0,
+      };
     },
   },
   fetch: {
@@ -160,26 +156,33 @@ export const defaultDoainClientConfig: DoainClientConfig = {
       return "";
     },
   },
-  router: DefaultRouteConfig,
+  router: {
+    enableTokenAuth: false,
+    homeRoute: "/",
+    loginRoute: "/account/login",
+    unloggedOnlyRoutes: ["/account/login"],
+  },
 };
 
 class GlobalDoainConfig {
   private _config: DoainClientConfig = defaultDoainClientConfig;
   private emitter = mitt<Events>();
 
-  defineDoainConfig = (config: DoainClientConfig) => {
+  defineDoainConfig = <T extends DoainDefaultUserInfo = DoainDefaultUserInfo>(
+    config: DoainClientConfig<T>,
+  ) => {
     this.set("app", {
       appKey: config.app.appKey,
       storageKey: config.app.storageKey || config.app.appKey,
     });
     this.set("layout", {
-      ...DefaultLayoutConfig,
+      ...defaultDoainClientConfig.layout,
       ...(config.layout || {}),
     });
     this.set("store", config.store);
     this.set("fetch", config.fetch);
     this.set("router", {
-      ...DefaultRouteConfig,
+      ...defaultDoainClientConfig.layout,
       ...(config.router || {}),
     });
 
@@ -219,7 +222,9 @@ interface Context {
   sStorage: typeof sStorage;
 }
 
-export const defineClientConfig = (cb: (context: Context) => DoainClientConfig) => {
+export const defineClientConfig = <T extends DoainDefaultUserInfo = DoainDefaultUserInfo>(
+  cb: (context: Context) => DoainClientConfig<T>,
+) => {
   const config = cb({
     httpClient,
     lStorage,
@@ -239,14 +244,6 @@ export const defineClientConfig = (cb: (context: Context) => DoainClientConfig) 
 
 export function getDoainClientConfig() {
   return globalDoainConfig.config;
-}
-
-export function getDoainClientConfigKey<T extends ConfigKey>(key: T) {
-  return globalDoainConfig.get(key);
-}
-
-export function setDoainClientConfig<T extends ConfigKey>(key: T, value: DoainClientConfig[T]) {
-  globalDoainConfig.set(key, value);
 }
 
 export function subscribeDoainClientConfigKey<N extends ConfigKey>(

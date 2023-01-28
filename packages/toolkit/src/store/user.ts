@@ -1,11 +1,13 @@
+import { isPlainObj } from "@charrue/toolkit";
 import { defineStore, storeToRefs } from "pinia";
-import { ref } from "vue";
+import { ComputedRef, ref } from "vue";
 
-import { getDoainClientConfigKey, subscribeDoainClientConfigKey } from "../config";
+import { getDoainClientConfig, subscribeDoainClientConfigKey } from "../config";
 import { sStorage } from "../storage";
+import { DoainDefaultUserInfo } from "../types";
 
-let userFetchConfig = getDoainClientConfigKey("fetch");
-let userStorageConfig = getDoainClientConfigKey("store");
+let userFetchConfig = getDoainClientConfig().fetch;
+let userStorageConfig = getDoainClientConfig().store;
 subscribeDoainClientConfigKey("fetch", (config) => {
   userFetchConfig = {
     ...userFetchConfig,
@@ -61,11 +63,11 @@ export const useUserStore = defineStore("appUser", () => {
       loading.value = true;
       const result = await userFetchConfig.fetchUserInfo();
       loading.value = false;
-      if (result) {
-        const requiredUserData = userStorageConfig.getRequiredUserData(result);
+      if (result.success) {
+        const newValue = userStorageConfig.formatUserData(result.data);
         userInfo.value = {
-          ...requiredUserData,
-          ...result,
+          ...newValue,
+          ...(isPlainObj(result.data) ? result.data : {}),
         };
         sStorage.set(USERINFO_SESSION_KEY, result);
       }
@@ -80,8 +82,8 @@ export const useUserStore = defineStore("appUser", () => {
   };
 });
 
-export const useUserData = () => {
+export const useUserData = <T extends DoainDefaultUserInfo = DoainDefaultUserInfo>() => {
   const store = useUserStore();
   const { userInfo } = storeToRefs(store);
-  return userInfo;
+  return userInfo as ComputedRef<T>;
 };

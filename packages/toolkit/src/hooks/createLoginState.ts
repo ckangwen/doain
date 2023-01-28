@@ -1,12 +1,12 @@
 import { isFn, isPromise } from "@charrue/toolkit";
 import { ElNotification, NotificationOptions } from "element-plus";
 import { computed, ref } from "vue";
-import { useRouter } from "vue-router";
 
 import { getDoainClientConfig } from "../config";
 import { httpClient } from "../request/index";
 import { useUserStore } from "../store/index";
 import { setToken } from "../token";
+import { useRouter } from "./useRouter";
 
 type FormValue = Record<string, any>;
 
@@ -99,7 +99,7 @@ export const createLoginState = (options: CreateLoginStateOptions) => {
       userStore.refreshUserInfo(true);
 
       if (globalConfig?.router?.homeRoute) {
-        router.push(globalConfig.router.homeRoute);
+        router?.push(globalConfig.router.homeRoute);
       }
     };
 
