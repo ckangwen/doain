@@ -1,27 +1,40 @@
 import { defineClientConfig } from "@doain/toolkit";
 
+import { GlobalUserInfo, RawUserInfo } from "./types";
+
 const APP_KEY = "playground";
 const LOGIN_URL = "login";
 const USER_INFO_URL = "user/info";
 const LOGIN_ROUTE = "/account/login";
 
-export default defineClientConfig(({ httpClient }) => {
+export default defineClientConfig<GlobalUserInfo>(({ httpClient }) => {
   return {
     app: {
       appKey: APP_KEY,
     },
     layout: {
-      data: [],
+      title: "Doain",
+      data: [
+        {
+          path: "/account/user-info",
+          title: "UserInfo",
+        },
+      ],
     },
     store: {
-      getRequiredUserData(data) {
-        return data;
+      formatUserData(data) {
+        const { userId, username, avatar } = data as RawUserInfo;
+        return {
+          username,
+          userId,
+          avatar,
+        };
       },
     },
     fetch: {
       baseUrl: "http://150.158.181.150/mock-api/",
       tokenWhiteList: [LOGIN_URL],
-      async fetchUserInfo() {
+      fetchUserInfo() {
         return httpClient.limitRepeatedRequest({
           url: USER_INFO_URL,
         });
@@ -38,7 +51,7 @@ export default defineClientConfig(({ httpClient }) => {
     router: {
       loginRoute: LOGIN_ROUTE,
       homeRoute: "/",
-      enableTokenAuth: false,
+      enableTokenAuth: true,
       unimpededRoutes: [],
       unloggedOnlyRoutes: [LOGIN_ROUTE],
     },

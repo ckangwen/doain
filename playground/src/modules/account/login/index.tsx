@@ -35,28 +35,32 @@ export default defineComponent({
   },
   render() {
     return (
-      <CharrueSchemaForm
-        ref="elFormRef"
-        v-model={this.formValue}
-        schema={this.formSchema}
-        rules={this.formRules}
-      >
-        {{
-          extra: () => (
-            <ElFormItem class="w-full">
-              <ElButton
-                disabled={this.disabled}
-                loading={this.loading}
-                class="w-full"
-                type="primary"
-                onClick={this.doLogin}
-              >
-                Login
-              </ElButton>
-            </ElFormItem>
-          ),
-        }}
-      </CharrueSchemaForm>
+      <div class="w-400px m-auto pt-10">
+        <CharrueSchemaForm
+          ref="elFormRef"
+          labelWidth="100px"
+          labelPosition="left"
+          v-model={this.formValue}
+          schema={this.formSchema}
+          rules={this.formRules}
+        >
+          {{
+            extra: () => (
+              <ElFormItem class="w-full">
+                <ElButton
+                  disabled={this.disabled}
+                  loading={this.loading}
+                  class="w-full"
+                  type="primary"
+                  onClick={this.doLogin}
+                >
+                  Login
+                </ElButton>
+              </ElFormItem>
+            ),
+          }}
+        </CharrueSchemaForm>
+      </div>
     );
   },
 });
