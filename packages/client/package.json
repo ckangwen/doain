@@ -13,6 +13,9 @@
     "url": "git+https://github.com/ckangwen/doain",
     "directory": "packages/client"
   },
+  "license": "MIT",
+  "author": "ckangwen",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -24,9 +27,6 @@
       "types": "./global.d.ts"
     }
   },
-  "license": "MIT",
-  "author": "ckangwen",
-  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -41,8 +41,10 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@charrue/layout-next": "^1.0.4",
     "@charrue/schema-form-next": "^1.0.0",
     "@charrue/schema-table-next": "^1.0.2",
+    "@charrue/toolkit": "^0.14.1",
     "@doain/toolkit": "workspace:latest",
     "@vueuse/core": "^9.6.0",
     "axios": "^0.26.1",
@@ -50,8 +52,6 @@
     "element-resize-detector": "^1.2.4",
     "mitt": "^3.0.0",
     "pinia": "^2.0.26",
-    "@charrue/layout-next": "^1.0.2",
-    "@charrue/toolkit": "^0.14.1",
     "qs": "^6.11.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"

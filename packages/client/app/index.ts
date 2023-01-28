@@ -1,15 +1,14 @@
 import { AppLayout } from "~components";
-import userClientConfig from "~doain/clientConfig";
 import userSetup from "~doain/registerApp";
 import router from "~doain/router";
 import store from "~doain/store";
 import "~doain/unocss";
 
 import { inBrowser } from "@charrue/toolkit";
-import { routerTokenGuard } from "@doain/toolkit";
 import { createApp, defineComponent, h } from "vue";
 
 import "./globals";
+import { tokenGuard, userGuard } from "./router/guards";
 
 const DoainApp = defineComponent({
   name: "DoainApp",
@@ -31,13 +30,16 @@ function createClientApp() {
 
 if (inBrowser) {
   const { app } = createClientApp();
+  // store先于router处理，因为router中会有依赖store的部分
+  if (store) {
+    app.use(store);
+  }
+
   if (router) {
     app.use(router);
 
-    routerTokenGuard(router, userClientConfig);
-  }
-  if (store) {
-    app.use(store);
+    tokenGuard(router);
+    userGuard(router);
   }
 
   if (userSetup && typeof userSetup.onAppReady === "function") {

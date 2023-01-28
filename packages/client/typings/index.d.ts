@@ -70,7 +70,7 @@ declare module "~doain/unocss" {
 }
 
 declare module "~doain/clientConfig" {
-  import { DoainConfig } from "@doain/toolkit";
+  import type { DoainConfig } from "@doain/toolkit";
 
   const config: DoainConfig;
   export default config;
