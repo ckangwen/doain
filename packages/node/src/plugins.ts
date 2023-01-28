@@ -12,7 +12,13 @@ import VueComponentsPlugin from "unplugin-vue-components/vite";
 import { defineConfig as defineViteConfig, mergeConfig } from "vite";
 import type { PluginOption } from "vite";
 
-import { APP_INDEX_PATH, createClientAlias } from "./alias";
+import {
+  APP_INDEX_PATH,
+  DIST_CLIENT_PATH,
+  createClientAlias,
+  getUserClientConfigPath,
+  getUserRegisterAppPath,
+} from "./alias";
 import type { DoainConfig } from "./config";
 import { cleanUrl } from "./helper";
 
@@ -66,7 +72,10 @@ export async function createDoainPlugin(
 }
 
 function doainPlugin(config: DoainConfig, recreateServer?: () => Promise<void>): PluginOption {
-  const { configPath, configDeps, vite: userViteConfig } = config;
+  const { configPath, configDeps, vite: userViteConfig, root } = config;
+
+  const userConfigFiles = [getUserClientConfigPath(root), getUserRegisterAppPath(root)];
+
   return {
     name: "doain",
 
@@ -89,6 +98,13 @@ function doainPlugin(config: DoainConfig, recreateServer?: () => Promise<void>):
           server.watcher.add(file);
         });
       }
+
+      // 监听用户自定义的配置文件
+      userConfigFiles.forEach((filepath) => {
+        if (filepath && !filepath.startsWith(DIST_CLIENT_PATH)) {
+          server.watcher.add(filepath);
+        }
+      });
 
       // 在内部中间件安装后执行
       // serve our index.html after vite history fallback

@@ -20,9 +20,9 @@
   "typings": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "require": "./index.js",
-      "import": "./index.js"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
     },
     "./*": "./*",
     "./global": {

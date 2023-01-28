@@ -59,7 +59,7 @@ function getStorePath(root: string) {
   return userPath || defaultPath;
 }
 
-function getRegisterAppPath(root: string) {
+export function getUserRegisterAppPath(root: string) {
   const defaultPath = join(DIST_CLIENT_PATH, "app/registerApp.js");
   const userPath = ["ts", "js"]
     .map((ext) => join(root, `src/registerApp.${ext}`))
@@ -68,7 +68,7 @@ function getRegisterAppPath(root: string) {
   return userPath || defaultPath;
 }
 
-function getUserClientConfig(root: string) {
+export function getUserClientConfigPath(root: string) {
   const defaultPath = join(DIST_CLIENT_PATH, "app/client.config.js");
   const userPath = ["ts", "js"]
     .map((ext) => join(root, `src/client.config.${ext}`))
@@ -99,7 +99,7 @@ export function createClientAlias(config: DoainConfig): Alias[] {
     },
     {
       find: "~doain/registerApp",
-      replacement: getRegisterAppPath(root),
+      replacement: getUserRegisterAppPath(root),
     },
     {
       find: "~doain/unocss",
@@ -107,7 +107,7 @@ export function createClientAlias(config: DoainConfig): Alias[] {
     },
     {
       find: "~doain/clientConfig",
-      replacement: getUserClientConfig(root),
+      replacement: getUserClientConfigPath(root),
     },
   ];
 
