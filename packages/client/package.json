@@ -1,6 +1,6 @@
 {
   "name": "@doain/client",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "doain客户端,主要提供项目入口,工具函数以及内部组件",
   "keywords": [
     "doain",
