@@ -27,6 +27,16 @@
     "./*": "./*",
     "./global": {
       "types": "./global.d.ts"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "require": "./dist/config.js",
+      "import": "./dist/config.js"
+    },
+    "./plugin": {
+      "types": "./dist/plugin.d.ts",
+      "require": "./dist/plugin.js",
+      "import": "./dist/plugin.js"
     }
   },
   "files": [
@@ -61,6 +71,8 @@
     "vite-plugin-inspect": "^0.7.8"
   },
   "devDependencies": {
+    "@charrue/toolkit": "^0.14.1",
+    "@charrue/types": "^0.1.0",
     "@types/compression": "^1.7.2",
     "@types/debug": "^4.1.7",
     "@types/escape-html": "^1.0.2",

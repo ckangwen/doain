@@ -1,14 +1,26 @@
-import { normalizePath } from "vite";
 import { describe, expect, test } from "vitest";
 
-import { resolveDoainConfig } from "../src/config";
+import { resolveDoainConfig } from "../src/config/index";
 
 const ROOT = __dirname;
 
 describe("config", () => {
   test("resolveDoainConfig", async () => {
-    const config = await resolveDoainConfig(ROOT);
+    const config = await resolveDoainConfig({ root: ROOT });
 
-    expect(config.root).toBe(normalizePath(ROOT));
+    expect(config.base).toBeDefined();
+    expect(config.outDir).toBeDefined();
+    expect(config.builtPlugins.pages).toBe(false);
+
+    expect(config.vite).toEqual({});
+    const newConfig = await resolveDoainConfig({ root: ROOT, stage: "build" });
+
+    expect(newConfig.vite).toEqual({
+      resolve: {
+        alias: {
+          "~dist/": "dist/",
+        },
+      },
+    });
   });
 });

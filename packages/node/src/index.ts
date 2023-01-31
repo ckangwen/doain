@@ -1,3 +1,3 @@
-import { defineConfig } from "./config";
+import { defineConfig } from "./config/index";
 
 export { defineConfig };

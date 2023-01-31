@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { normalizePath } from "vite";
 import type { Alias } from "vite";
 
-import type { DoainConfig } from "./config";
+import type { ResolvedConfig } from "./config/index";
 
 const join = (...args: Parameters<typeof _join>) => {
   return normalizePath(_join(...args));
@@ -16,9 +16,6 @@ export const DIST_CLIENT_PATH = normalizePath(resolve(currentDir, "../../client/
 export const APP_INDEX_PATH = normalizePath(join(DIST_CLIENT_PATH, "app/index.js"));
 export const APP_PATH = join(DIST_CLIENT_PATH, "app");
 
-export const SHARED_PATH = join(DIST_CLIENT_PATH, "shared");
-export const DEFAULT_THEME_DIR = join(DIST_CLIENT_PATH, "theme");
-
 /**
  * 根据是否启用`vite-plugin-pages`,`vite-plugin-vue-layouts`
  * 加载不同的router
@@ -27,8 +24,8 @@ export const DEFAULT_THEME_DIR = join(DIST_CLIENT_PATH, "theme");
  */
 function getRouterPath(
   root: string,
-  pages: DoainConfig["builtPlugins"]["pages"],
-  pageLayout: DoainConfig["builtPlugins"]["pageLayout"],
+  pages: ResolvedConfig["builtPlugins"]["pages"],
+  pageLayout: ResolvedConfig["builtPlugins"]["pageLayout"],
 ) {
   let routerPath = join(DIST_CLIENT_PATH, "app/router/original.js");
   if (pages && pageLayout) {
@@ -75,14 +72,14 @@ export function getUserClientConfigPath(root: string) {
   return userPath || defaultPath;
 }
 
-function getUnocssPath(unocss: DoainConfig["builtPlugins"]["unocss"]) {
+function getUnocssPath(unocss: ResolvedConfig["builtPlugins"]["unocss"]) {
   if (unocss === false) {
     return join(DIST_CLIENT_PATH, "app/unocss/disable.js");
   }
   return join(DIST_CLIENT_PATH, "app/unocss/enable.js");
 }
 
-export function createClientAlias(config: DoainConfig): Alias[] {
+export function createClientAlias(config: ResolvedConfig): Alias[] {
   const { root, builtPlugins } = config;
   const { pages, pageLayout, unocss } = builtPlugins;
 

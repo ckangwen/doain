@@ -2,7 +2,7 @@ import compression from "compression";
 import polka from "polka";
 import sirv, { RequestHandler } from "sirv";
 
-import { resolveDoainConfig } from "../config";
+import { resolveDoainConfig } from "../config/index";
 
 function trimChar(str: string, char: string) {
   while (str.charAt(0) === char) {
@@ -23,7 +23,7 @@ export interface ServeOptions {
 
 export async function preview(root: string, options: ServeOptions = {}) {
   const port = options.port !== undefined ? options.port : 4173;
-  const config = await resolveDoainConfig(root);
+  const config = await resolveDoainConfig({ root });
   const configBase = config.base.replace("./", "");
   const base = trimChar(options?.base || configBase, "/");
 

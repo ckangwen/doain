@@ -2,8 +2,8 @@ import dns from "dns";
 import c from "picocolors";
 import { ServerOptions, createServer as createViteServer } from "vite";
 
-import { resolveDoainConfig } from "../config";
-import { createDoainPlugin } from "../plugins";
+import { resolveDoainConfig } from "../config/index";
+import { createDoainPlugin } from "../plugin/index";
 
 async function createServer(
   root: string = process.cwd(),
@@ -18,7 +18,13 @@ async function createServer(
     root: config.srcDir,
     cacheDir: config.cacheDir,
     server: serverOptions,
-    plugins: [await createDoainPlugin(config, recreateServer)],
+    plugins: [
+      await createDoainPlugin({
+        config,
+        recreateServer,
+        stage: "dev",
+      }),
+    ],
   });
 }
 

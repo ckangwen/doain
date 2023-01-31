@@ -8,16 +8,16 @@ import { createLogger, transformWithEsbuild, build as viteBuild } from "vite";
 import type { UserConfig as ViteUserConfig } from "vite";
 
 import { APP_INDEX_PATH } from "../alias";
-import { DoainConfig, HeadConfig, resolveDoainConfig } from "../config";
-import { createDoainPlugin } from "../plugins";
+import { HeadConfig, ResolvedConfig, resolveDoainConfig } from "../config/index";
+import { getHtmlOptionValue } from "../helper";
+import { createDoainPlugin } from "../plugin/index";
 
 export const failMark = "\x1b[31m✖\x1b[0m";
 export const okMark = "\x1b[32m✓\x1b[0m";
 
 export async function build(root: string, argv: any) {
-  const config = await resolveDoainConfig(root);
+  const config = await resolveDoainConfig({ root, stage: "build" });
   const start = Date.now();
-  const logLevel = "info";
 
   console.log(c.cyan("start building..."));
 
@@ -28,7 +28,7 @@ export async function build(root: string, argv: any) {
       mode: argv.mode || "production",
       base: config.base,
       logLevel: "warn",
-      plugins: [await createDoainPlugin(config)],
+      plugins: [await createDoainPlugin({ config, stage: "build" })],
       clearScreen: true,
       build: {
         outDir: config.outDir,
@@ -58,7 +58,7 @@ export async function build(root: string, argv: any) {
       renderIndexPage(config, appChunk, cssChunk);
     }
   } catch (e: any) {
-    createLogger(logLevel).error(c.red(`error during build:\n${e.stack}`), {
+    createLogger("info").error(c.red(`error during build:\n${e.stack}`), {
       error: e,
     });
     process.exit(1);
@@ -71,12 +71,18 @@ export async function build(root: string, argv: any) {
   console.log(`build complete in ${((Date.now() - start) / 1000).toFixed(2)}s.`);
 }
 
-async function renderIndexPage(config: DoainConfig, appChunk: OutputChunk, cssChunk: OutputAsset) {
+async function renderIndexPage(
+  config: ResolvedConfig,
+  appChunk: OutputChunk,
+  cssChunk: OutputAsset,
+) {
   const stylesheetLink = cssChunk?.fileName
     ? `<link rel="preload stylesheet" href="${config.base}${cssChunk.fileName}" as="style">`
     : "";
 
-  const head = config.html.head ? await renderHead(config.html.head) : "";
+  const head = config.html.head
+    ? await renderHead(getHtmlOptionValue(config.html.head, "build"))
+    : "";
 
   let htmlContent = `
     <!DOCTYPE html>
@@ -84,7 +90,7 @@ async function renderIndexPage(config: DoainConfig, appChunk: OutputChunk, cssCh
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>${config.html.title || ""}</title>
+        <title>${getHtmlOptionValue(config.html.title, "build") || ""}</title>
         <meta name="description" content="${config.html.description || ""}">
         ${stylesheetLink}
         ${head}
@@ -101,14 +107,19 @@ async function renderIndexPage(config: DoainConfig, appChunk: OutputChunk, cssCh
     </html>`.trim();
 
   const htmlFilePath = resolve(config.outDir, "index.html");
-  if (config.html.transformHtml) {
-    htmlContent = await config.html.transformHtml(htmlContent, config);
+  const htmlTransform = config.html.transformHtml;
+  if (htmlTransform) {
+    const transformedContent = await getHtmlOptionValue(htmlTransform, "build")?.(
+      htmlContent,
+      config,
+    );
+    htmlContent = transformedContent || htmlContent;
   }
 
   writeFileSync(htmlFilePath, htmlContent, "utf-8");
 }
 
-function renderHead(head: HeadConfig[]): Promise<string> {
+function renderHead(head: HeadConfig[] = []): Promise<string> {
   return Promise.all(
     head.map(async ([tag, attrs = {}, innerHTML = ""]) => {
       const openTag = `<${tag}${renderAttrs(attrs)}>`;
