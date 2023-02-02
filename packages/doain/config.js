@@ -1,3 +1,1 @@
-import { defineConfig } from "@doain/node";
-
-export { defineConfig };
+export * from "@doain/node/config";

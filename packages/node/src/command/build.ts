@@ -1,22 +1,20 @@
-// import ora from "ora";
-import escape from "escape-html";
 import { writeFileSync } from "fs";
 import { resolve } from "path";
 import c from "picocolors";
 import type { OutputAsset, OutputChunk, RollupOutput } from "rollup";
-import { createLogger, transformWithEsbuild, build as viteBuild } from "vite";
+import { createLogger, build as viteBuild } from "vite";
 import type { UserConfig as ViteUserConfig } from "vite";
 
 import { APP_INDEX_PATH } from "../alias";
-import { HeadConfig, ResolvedConfig, resolveDoainConfig } from "../config/index";
-import { getHtmlOptionValue } from "../helper";
+import { ResolvedConfig, resolveDoainConfig } from "../config/index";
+import { getEntryHtmlContent } from "../entryHtml";
 import { createDoainPlugin } from "../plugin/index";
 
 export const failMark = "\x1b[31m✖\x1b[0m";
 export const okMark = "\x1b[32m✓\x1b[0m";
 
 export async function build(root: string, argv: any) {
-  const config = await resolveDoainConfig({ root, stage: "build" });
+  const config = await resolveDoainConfig({ root, command: "build" });
   const start = Date.now();
 
   console.log(c.cyan("start building..."));
@@ -28,7 +26,7 @@ export async function build(root: string, argv: any) {
       mode: argv.mode || "production",
       base: config.base,
       logLevel: "warn",
-      plugins: [await createDoainPlugin({ config, stage: "build" })],
+      plugins: [await createDoainPlugin({ config, command: "build" })],
       clearScreen: true,
       build: {
         outDir: config.outDir,
@@ -80,68 +78,21 @@ async function renderIndexPage(
     ? `<link rel="preload stylesheet" href="${config.base}${cssChunk.fileName}" as="style">`
     : "";
 
-  const head = config.html.head
-    ? await renderHead(getHtmlOptionValue(config.html.head, "build"))
-    : "";
-
-  let htmlContent = `
-    <!DOCTYPE html>
-    <html lang="zh-CN">
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>${getHtmlOptionValue(config.html.title, "build") || ""}</title>
-        <meta name="description" content="${config.html.description || ""}">
-        ${stylesheetLink}
-        ${head}
-      </head>
-      <body>
-        <div id="app">${config.html.content || ""}</div>
-        ${
-          appChunk
-            ? `<script type="module" async src="${config.base}${appChunk.fileName}"></script>`
-            : ``
-        }
-        ${config.html.inlinedScript || ""}
-      </body>
-    </html>`.trim();
+  let htmlContent = await getEntryHtmlContent(config, {
+    head: stylesheetLink,
+    script: `        ${
+      appChunk
+        ? `<script type="module" async src="${config.base}${appChunk.fileName}"></script>`
+        : ``
+    }`,
+  });
 
   const htmlFilePath = resolve(config.outDir, "index.html");
   const htmlTransform = config.html.transformHtml;
   if (htmlTransform) {
-    const transformedContent = await getHtmlOptionValue(htmlTransform, "build")?.(
-      htmlContent,
-      config,
-    );
+    const transformedContent = await htmlTransform?.(htmlContent, config);
     htmlContent = transformedContent || htmlContent;
   }
 
   writeFileSync(htmlFilePath, htmlContent, "utf-8");
-}
-
-function renderHead(head: HeadConfig[] = []): Promise<string> {
-  return Promise.all(
-    head.map(async ([tag, attrs = {}, innerHTML = ""]) => {
-      const openTag = `<${tag}${renderAttrs(attrs)}>`;
-      if (tag !== "link" && tag !== "meta") {
-        if (tag === "script" && (attrs.type === undefined || attrs.type.includes("javascript"))) {
-          innerHTML = (
-            await transformWithEsbuild(innerHTML, "inline-script.js", {
-              minify: true,
-            })
-          ).code.trim();
-        }
-        return `${openTag}${innerHTML}</${tag}>`;
-      }
-      return openTag;
-    }),
-  ).then((tags) => tags.join("\n  "));
-}
-
-function renderAttrs(attrs: Record<string, string>): string {
-  return Object.keys(attrs)
-    .map((key) => {
-      return ` ${key}="${escape(attrs[key])}"`;
-    })
-    .join("");
 }

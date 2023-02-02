@@ -3,7 +3,7 @@ import { definePlugin } from "../../src/plugin"
 export default definePlugin(() => {
   return {
     name: "test",
-    stage: "build",
+    command: "build",
     vite: {
       resolve: {
         alias: {

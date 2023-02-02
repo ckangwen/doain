@@ -13,7 +13,7 @@ describe("config", () => {
     expect(config.builtPlugins.pages).toBe(false);
 
     expect(config.vite).toEqual({});
-    const newConfig = await resolveDoainConfig({ root: ROOT, stage: "build" });
+    const newConfig = await resolveDoainConfig({ root: ROOT, command: "build" });
 
     expect(newConfig.vite).toEqual({
       resolve: {

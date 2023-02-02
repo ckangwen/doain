@@ -31,29 +31,14 @@ export type HeadConfig =
   | [string, Record<string, string>]
   | [string, Record<string, string>, string];
 
-export interface HtmlObjectOption<T> {
-  value: T;
-  command?: Command;
-}
-export type HtmlOption<T> = T | HtmlObjectOption<T>;
-
 export interface HtmlOptions {
-  title?: HtmlOption<string>;
-  description?: HtmlOption<string>;
-  head?: HtmlOption<HeadConfig[]>;
-  content?: HtmlOption<string>;
-  inlinedScript?: HtmlOption<string>;
-  transformHtml?: HtmlOption<(content: string, config: ResolvedConfig) => Promise<string>>;
+  title?: string;
+  description?: string;
+  head?: HeadConfig[];
+  content?: string;
+  inlinedScript?: string;
+  transformHtml?: (content: string, config: ResolvedConfig) => Promise<string>;
 }
-export interface HtmlObjectOptions {
-  title?: HtmlObjectOption<string>;
-  description?: HtmlObjectOption<string>;
-  head?: HtmlObjectOption<HeadConfig[]>;
-  content?: HtmlObjectOption<string>;
-  inlinedScript?: HtmlObjectOption<string>;
-  transformHtml?: HtmlObjectOption<(content: string, config: ResolvedConfig) => Promise<string>>;
-}
-
 export interface UserConfig {
   base?: string;
   root?: string;
@@ -71,11 +56,10 @@ export interface UserConfig {
 export interface RequiredUserConfig
   extends SetRequired<
     Omit<UserConfig, "plugins">,
-    "base" | "root" | "srcDir" | "outDir" | "cacheDir" | "vite" | "build"
+    "base" | "root" | "srcDir" | "outDir" | "cacheDir" | "vite" | "build" | "html"
   > {
   builtPlugins: BuiltPlugins;
   buildEnd?: (config: ResolvedConfig) => Promise<void>;
-  html: HtmlObjectOptions;
 }
 
 export interface ResolvedConfig extends RequiredUserConfig {

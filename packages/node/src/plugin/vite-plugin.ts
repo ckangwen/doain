@@ -19,16 +19,17 @@ import {
   getUserRegisterAppPath,
 } from "../alias";
 import type { Command, ResolvedConfig } from "../config/index";
-import { cleanUrl, getHtmlOptionValue } from "../helper";
+import { getEntryHtmlContent } from "../entryHtml";
+import { cleanUrl } from "../helper";
 
 const VisualizerPlugin = (_VisualizerPlugin as any).default || _VisualizerPlugin;
 
 const DoainNodePlugin = (options: {
   config: ResolvedConfig;
   recreateServer?: () => Promise<void>;
-  stage?: Command;
+  command?: Command;
 }): PluginOption => {
-  const { config, recreateServer, stage } = options;
+  const { config, recreateServer } = options;
   const { configPath, configDeps, vite: userViteConfig, root } = config;
 
   const userConfigFiles = [getUserClientConfigPath(root), getUserRegisterAppPath(root)];
@@ -42,6 +43,9 @@ const DoainNodePlugin = (options: {
         // 针对于@doain/client的配置
         resolve: {
           alias: createClientAlias(config),
+        },
+        optimizeDeps: {
+          entries: [APP_INDEX_PATH, ...userConfigFiles],
         },
       });
 
@@ -72,18 +76,9 @@ const DoainNodePlugin = (options: {
           if (url?.endsWith(".html")) {
             res.statusCode = 200;
             res.setHeader("Content-Type", "text/html");
-            let html = `<!DOCTYPE html>
-<html lang="zh-CN">
-  <head>
-    <title>${getHtmlOptionValue(config.html.title, stage) || ""}</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-  </head>
-  <body>
-    <div id="app">${getHtmlOptionValue(config.html.content, stage)}</div>
-    <script type="module" src="/@fs/${APP_INDEX_PATH}"></script>
-  </body>
-</html>`;
+            let html = await getEntryHtmlContent(config, {
+              script: `<script type="module" src="/@fs/${APP_INDEX_PATH}"></script>`,
+            });
             html = await server.transformIndexHtml(url, html, req.originalUrl);
             res.end(html);
             return;
@@ -113,9 +108,9 @@ const DoainNodePlugin = (options: {
 export async function createDoainPlugin(options: {
   config: ResolvedConfig;
   recreateServer?: () => Promise<void>;
-  stage?: Command;
+  command?: Command;
 }): Promise<PluginOption> {
-  const { config, recreateServer, stage } = options;
+  const { config, recreateServer, command } = options;
   const { vue, vueJsx, pages, pageLayout, unocss, autoImport, vueComponents, visualizer } =
     config.builtPlugins || {};
 
@@ -158,7 +153,7 @@ export async function createDoainPlugin(options: {
     DoainNodePlugin({
       config,
       recreateServer,
-      stage,
+      command,
     }),
   );
 

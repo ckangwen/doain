@@ -29,12 +29,12 @@
       "types": "./global.d.ts"
     },
     "./config": {
-      "types": "./dist/config.d.ts",
+      "types": "./config.d.ts",
       "require": "./dist/config.js",
       "import": "./dist/config.js"
     },
     "./plugin": {
-      "types": "./dist/plugin.d.ts",
+      "types": "./plugin.d.ts",
       "require": "./dist/plugin.js",
       "import": "./dist/plugin.js"
     }
@@ -43,7 +43,9 @@
     "dist",
     "bin",
     "README.md",
-    "global.d.ts"
+    "global.d.ts",
+    "config.d.ts",
+    "plugin.d.ts"
   ],
   "scripts": {
     "build": "tsup",
@@ -58,7 +60,6 @@
     "@vitejs/plugin-vue-jsx": "^2.1.1",
     "compression": "^1.7.4",
     "debug": "^4.3.4",
-    "fs-extra": "^11.1.0",
     "minimist": "^1.2.7",
     "picocolors": "^1.0.0",
     "polka": "1.0.0-next.22",
@@ -76,7 +77,6 @@
     "@types/compression": "^1.7.2",
     "@types/debug": "^4.1.7",
     "@types/escape-html": "^1.0.2",
-    "@types/fs-extra": "^9.0.13",
     "@types/minimist": "^1.2.2",
     "@unocss/vite": "^0.48.3",
     "escape-html": "^1.0.3",

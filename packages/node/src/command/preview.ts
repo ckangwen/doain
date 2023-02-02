@@ -23,7 +23,7 @@ export interface ServeOptions {
 
 export async function preview(root: string, options: ServeOptions = {}) {
   const port = options.port !== undefined ? options.port : 4173;
-  const config = await resolveDoainConfig({ root });
+  const config = await resolveDoainConfig({ root, command: "preview" });
   const configBase = config.base.replace("./", "");
   const base = trimChar(options?.base || configBase, "/");
 

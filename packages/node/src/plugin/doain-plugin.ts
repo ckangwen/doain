@@ -2,7 +2,7 @@ import { Command, UserConfig } from "../config/types";
 
 export interface DoainPlugin {
   name: string;
-  stage: Command;
+  command?: Command;
   vite?: UserConfig["vite"];
   build?: UserConfig["build"];
   html?: UserConfig["html"];

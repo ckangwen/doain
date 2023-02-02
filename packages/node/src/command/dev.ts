@@ -10,7 +10,7 @@ async function createServer(
   serverOptions: ServerOptions = {},
   recreateServer?: () => Promise<void>,
 ) {
-  const config = await resolveDoainConfig(root);
+  const config = await resolveDoainConfig({ root, command: "dev" });
 
   dns.setDefaultResultOrder("verbatim");
 
@@ -22,7 +22,7 @@ async function createServer(
       await createDoainPlugin({
         config,
         recreateServer,
-        stage: "dev",
+        command: "dev",
       }),
     ],
   });

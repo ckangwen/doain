@@ -8,7 +8,7 @@ const argv: any = minimist(process.argv.slice(2));
 console.log(c.cyan(`doain v${version}`));
 
 const command = argv._[0];
-const root = argv._[command ? 1 : 0];
+const root = argv._[1] || process.cwd();
 if (root) {
   argv.root = root;
 }

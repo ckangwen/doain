@@ -23,13 +23,18 @@
       "import": "./index.js"
     },
     "./*": "./*",
-    "./config": {
-      "types": "./config.d.ts",
-      "require": "./config.cjs",
-      "import": "./config.js"
-    },
     "./global": {
       "types": "./global.d.ts"
+    },
+    "./config": {
+      "types": "./config.d.ts",
+      "require": "./config.js",
+      "import": "./config.js"
+    },
+    "./plugin": {
+      "types": "./plugin.d.ts",
+      "require": "./plugin.js",
+      "import": "./plugin.js"
     }
   },
   "main": "index.js",

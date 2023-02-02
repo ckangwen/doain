@@ -1,7 +1,4 @@
-import { has } from "@charrue/toolkit";
 import _debug from "debug";
-
-import { Command, HtmlObjectOption, HtmlOption } from "./config/types";
 
 export const APP_NAME = "doain";
 
@@ -26,23 +23,3 @@ export type DeepRequired<T> = T extends Primitive
     };
 
 export const isObj = (val: unknown): val is Record<string, unknown> => typeof val === "object";
-
-export const getHtmlOptionValue = <
-  V extends HtmlOption<any>,
-  R = V extends HtmlOption<infer U> ? U : V,
->(
-  htmlOption: V,
-  command?: Command,
-): R | undefined => {
-  if (has(htmlOption, "command") && has(htmlOption, "value")) {
-    const htmlOptionObj = htmlOption as HtmlObjectOption<unknown>;
-    const htmlOptionValue = htmlOptionObj.value as R;
-
-    return command === htmlOptionObj.command || !command ? htmlOptionValue : undefined;
-  }
-  return htmlOption as unknown as R;
-};
-
-export const isObjectHtmlOption = (htmlOption: unknown): htmlOption is HtmlObjectOption<any> => {
-  return has(htmlOption, "command") && has(htmlOption, "value");
-};
