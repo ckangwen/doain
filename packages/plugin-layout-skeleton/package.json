@@ -1,0 +1,24 @@
+{
+  "name": "@doain/plugin-layout-skeleton",
+  "version": "0.0.1",
+  "description": "doain插件,在项目启动的白屏阶段设置一个骨架屏",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "type": "module",
+  "dependencies": {
+    "doain": "workspace:*"
+  },
+  "keywords": [
+    "doain",
+    "doain-plugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckangwen/doain",
+    "directory": "packages/plugin-layout-skeleton"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
