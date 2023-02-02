@@ -1,4 +1,4 @@
-import fs from "fs-extra";
+import { existsSync } from "fs";
 import { join as _join, dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { normalizePath } from "vite";
@@ -37,7 +37,7 @@ function getRouterPath(
   if (pages === false && pageLayout === false) {
     const userRouter = ["ts", "js"]
       .map((ext) => join(root, `src/router/index.${ext}`))
-      .find(fs.pathExistsSync);
+      .find(existsSync);
     if (userRouter) {
       routerPath = userRouter;
     }
@@ -50,24 +50,24 @@ function getRouterPath(
  */
 function getStorePath(root: string) {
   const defaultPath = join(DIST_CLIENT_PATH, "app/store/original.js");
-  const userPath = ["ts", "js"]
-    .map((ext) => join(root, `src/store/index.${ext}`))
-    .find(fs.pathExistsSync);
+  const userPath = ["ts", "js"].map((ext) => join(root, `src/store/index.${ext}`)).find(existsSync);
   return userPath || defaultPath;
 }
 
 export function getUserRegisterAppPath(root: string) {
-  const defaultPath = join(DIST_CLIENT_PATH, "app/registerApp.js");
+  const defaultPath = join(DIST_CLIENT_PATH, "app/.doain.setup.js");
   const userPath = ["ts", "js"]
-    .map((ext) => join(root, `src/registerApp.${ext}`))
-    .find(fs.pathExistsSync);
+    .map((ext) => join(root, `src/.doain.setup.${ext}`))
+    .find(existsSync);
 
   return userPath || defaultPath;
 }
 
 export function getUserClientConfigPath(root: string) {
-  const defaultPath = join(DIST_CLIENT_PATH, "app/client.config.js");
-  const userPath = ["ts", "js"].map((ext) => join(root, `.doainrc.${ext}`)).find(fs.pathExistsSync);
+  const defaultPath = join(DIST_CLIENT_PATH, "app/.doain.config.js");
+  const userPath = ["ts", "js"]
+    .map((ext) => join(root, `src/.doain.config.${ext}`))
+    .find(existsSync);
 
   return userPath || defaultPath;
 }
@@ -93,7 +93,7 @@ export function createClientAlias(config: ResolvedConfig): Alias[] {
       replacement: getStorePath(root),
     },
     {
-      find: "~doain/registerApp",
+      find: "~doain/setup",
       replacement: getUserRegisterAppPath(root),
     },
     {

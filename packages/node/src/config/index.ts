@@ -1,25 +1,19 @@
 import { simpleDeepMerge } from "@charrue/toolkit";
 import { Awaitable } from "@charrue/types";
-import fs from "fs-extra";
+import { existsSync } from "fs";
 import { resolve } from "path";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import { BuildOptions, UserConfigExport, loadConfigFromFile, normalizePath } from "vite";
 
-import { APP_NAME } from "../constants";
-import { isObjectHtmlOption } from "../helper";
-import { BuiltPlugins, Command, HtmlObjectOptions, ResolvedConfig, UserConfig } from "./types";
-
-export const resolveFromDoain = (root: string, file: string) => {
-  return normalizePath(resolve(root, `.${APP_NAME}`, file));
-};
+import { BuiltPlugins, Command, HtmlOptions, ResolvedConfig, UserConfig } from "./types";
 
 export const mergeDefaultConfig = (userConfig: UserConfig, root: string): ResolvedConfig => {
   let { srcDir = ".", outDir = "dist", cacheDir = "cache" } = userConfig;
   const { base = "./", builtPlugins: userBuiltPlugins = {} } = userConfig;
 
   srcDir = normalizePath(resolve(root, srcDir));
-  outDir = resolveFromDoain(root, outDir);
-  cacheDir = resolveFromDoain(root, cacheDir);
+  outDir = normalizePath(resolve(root, outDir));
+  cacheDir = normalizePath(resolve(root, cacheDir));
 
   function mergeBuiltPluginOptions<N extends keyof BuiltPlugins>(
     name: N,
@@ -58,16 +52,7 @@ export const mergeDefaultConfig = (userConfig: UserConfig, root: string): Resolv
   };
   const viteOptions: UserConfigExport = userConfig.vite || {};
   const buildOptions: BuildOptions = userConfig.build || {};
-  const htmlOptions: Record<string, any> = userConfig.html || {};
-  const htmlObjectOptions = Object.keys(htmlOptions).reduce((acc, k) => {
-    const value = htmlOptions[k];
-    acc[k as keyof HtmlObjectOptions] = isObjectHtmlOption(value)
-      ? value
-      : {
-          value,
-        };
-    return acc;
-  }, {} as unknown as HtmlObjectOptions);
+  const htmlOptions = userConfig.html || {};
 
   return {
     root,
@@ -78,7 +63,7 @@ export const mergeDefaultConfig = (userConfig: UserConfig, root: string): Resolv
     builtPlugins,
     vite: viteOptions,
     build: buildOptions,
-    html: htmlObjectOptions,
+    html: htmlOptions as HtmlOptions,
     buildEnd: userConfig.buildEnd,
     configDeps: [],
     configPath: "",
@@ -95,23 +80,27 @@ const supportedConfigExtensions = ["js", "ts", "cjs", "mjs", "cts", "mts"];
 type AwaitableUserConfig = Awaitable<UserConfig> | (() => Awaitable<UserConfig>);
 
 /**
- * 读取`.doain/config.ext`的用户配置，以及该文件的依赖文件
+ * 读取用户配置，以及该文件的依赖文件
  */
 const resolveUserConfig = async (
   root: string,
-  command: "serve" | "build" = "serve",
+  command: Command,
   mode = "development",
 ): Promise<[UserConfig, string | undefined, string[]]> => {
   const configPath = supportedConfigExtensions
-    .map((ext) => resolveFromDoain(root, `config.${ext}`))
-    .find(fs.pathExistsSync);
+    .map((ext) => normalizePath(resolve(root, `.doainrc.${ext}`)))
+    .find(existsSync);
 
   let userConfig: AwaitableUserConfig = {};
   let configDeps: string[] = [];
   if (!configPath) {
     //
   } else {
-    const configExports = await loadConfigFromFile({ command, mode }, configPath, root);
+    const configExports = await loadConfigFromFile(
+      { command: command === "build" ? "build" : "serve", mode },
+      configPath,
+      root,
+    );
     if (configExports) {
       userConfig = configExports.config as AwaitableUserConfig;
       configDeps = configExports.dependencies.map((file) => normalizePath(resolve(file)));
@@ -127,14 +116,14 @@ const resolveUserConfig = async (
 
 export const resolveDoainConfig = async (options: {
   root: string;
-  stage?: Command;
+  command?: Command;
 }): Promise<ResolvedConfig> => {
-  const { root, stage } = options;
-  const [userConfig, configPath, configDeps] = await resolveUserConfig(root);
+  const { root, command = "dev" } = options;
+  const [userConfig, configPath, configDeps] = await resolveUserConfig(root, command);
   let userConfigWithDefaults = mergeDefaultConfig(userConfig, root);
   const plugins =
     userConfig.plugins?.filter((item) => {
-      return item.stage === stage || !item.stage;
+      return item.command === command || !item.command;
     }) || [];
   plugins?.forEach((item) => {
     userConfigWithDefaults = mergeConfig(userConfigWithDefaults, item);

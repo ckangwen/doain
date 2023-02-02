@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@charrue/toolkit": "^0.14.1",
+    "@doain/plugin-layout-skeleton": "workspace:*",
     "doain": "workspace:*",
     "element-plus": "^2.1.11",
     "sass": "^1.57.1"

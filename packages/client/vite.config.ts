@@ -28,8 +28,8 @@ export default defineConfig({
       entry: [
         "index.ts",
         "./app/index",
-        "./app/registerApp",
-        "./app/client.config",
+        "./app/.doain.config",
+        "./app/.doain.setup",
         "./components/index.ts",
         ...routerFiles,
       ],

@@ -39,7 +39,7 @@ declare module "~doain/store" {
   export default store;
 }
 
-declare module "~doain/registerApp" {
+declare module "~doain/setup" {
   import type { Pinia } from "pinia";
   import type { App } from "vue";
   import type { Router } from "vue-router";
