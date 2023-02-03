@@ -3,7 +3,13 @@ import { Awaitable } from "@charrue/types";
 import { existsSync } from "fs";
 import { resolve } from "path";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-import { BuildOptions, UserConfigExport, loadConfigFromFile, normalizePath } from "vite";
+import {
+  BuildOptions,
+  UserConfigExport,
+  loadConfigFromFile,
+  mergeConfig as mergeViteConfig,
+  normalizePath,
+} from "vite";
 
 import { BuiltPlugins, Command, HtmlOptions, ResolvedConfig, UserConfig } from "./types";
 
@@ -72,6 +78,7 @@ export const mergeDefaultConfig = (userConfig: UserConfig, root: string): Resolv
 
 const mergeConfig = <T extends UserConfig>(source: T, target: UserConfig): ResolvedConfig => {
   const result = simpleDeepMerge(source, target) as ResolvedConfig;
+  result.vite = mergeViteConfig(source.vite || {}, target.vite || {});
   return result;
 };
 
