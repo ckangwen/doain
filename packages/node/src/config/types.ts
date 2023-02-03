@@ -7,7 +7,7 @@ import type { Options as VueJsxPluginOptions } from "@vitejs/plugin-vue-jsx";
 import type { PluginVisualizerOptions } from "rollup-plugin-visualizer";
 import AutoImportPlugin from "unplugin-auto-import/vite";
 import type { Options as VueComponentsOptions } from "unplugin-vue-components";
-import { UserConfigExport as ViteConfig } from "vite";
+import { UserConfig as ViteConfig } from "vite";
 import type { BuildOptions } from "vite";
 
 import { DoainPlugin } from "../plugin/doain-plugin";
@@ -28,8 +28,8 @@ export interface BuiltPlugins {
 }
 
 export type HeadConfig =
-  | [string, Record<string, string>]
-  | [string, Record<string, string>, string];
+  | [string, Record<string, string | true>]
+  | [string, Record<string, string | true>, string];
 
 export interface HtmlOptions {
   title?: string;

@@ -8,7 +8,10 @@ function renderHead(head: HeadConfig[] = []): Promise<string> {
     head.map(async ([tag, attrs = {}, innerHTML = ""]) => {
       const openTag = `<${tag}${renderAttrs(attrs)}>`;
       if (tag !== "link" && tag !== "meta") {
-        if (tag === "script" && (attrs.type === undefined || attrs.type.includes("javascript"))) {
+        if (
+          tag === "script" &&
+          (attrs.type === undefined || `${attrs.type}`.includes("javascript"))
+        ) {
           innerHTML = (
             await transformWithEsbuild(innerHTML, "inline-script.js", {
               minify: true,
@@ -22,10 +25,14 @@ function renderHead(head: HeadConfig[] = []): Promise<string> {
   ).then((tags) => tags.join("\n  "));
 }
 
-function renderAttrs(attrs: Record<string, string>): string {
+function renderAttrs(attrs: Record<string, string | true>): string {
   return Object.keys(attrs)
     .map((key) => {
-      return ` ${key}="${escape(attrs[key])}"`;
+      const value = attrs[key];
+      if (value && value === true) {
+        return ` ${key}`;
+      }
+      return ` ${key}="${escape(`${attrs[key]}`)}"`;
     })
     .join("");
 }
