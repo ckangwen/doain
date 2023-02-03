@@ -105,7 +105,6 @@ importers:
       '@types/compression': ^1.7.2
       '@types/debug': ^4.1.7
       '@types/escape-html': ^1.0.2
-      '@types/fs-extra': ^9.0.13
       '@types/minimist': ^1.2.2
       '@unocss/vite': ^0.48.3
       '@vitejs/plugin-vue': ^4.0.0
@@ -113,7 +112,6 @@ importers:
       compression: ^1.7.4
       debug: ^4.3.4
       escape-html: ^1.0.3
-      fs-extra: ^11.1.0
       minimist: ^1.2.7
       picocolors: ^1.0.0
       polka: 1.0.0-next.22
@@ -134,7 +132,6 @@ importers:
       '@vitejs/plugin-vue-jsx': 2.1.1_vite@4.0.4
       compression: 1.7.4
       debug: 4.3.4
-      fs-extra: 11.1.0
       minimist: 1.2.7
       picocolors: 1.0.0
       polka: 1.0.0-next.22
@@ -151,12 +148,19 @@ importers:
       '@types/compression': 1.7.2
       '@types/debug': 4.1.7
       '@types/escape-html': 1.0.2
-      '@types/fs-extra': 9.0.13
       '@types/minimist': 1.2.2
       '@unocss/vite': 0.48.4_rollup@3.10.0+vite@4.0.4
       escape-html: 1.0.3
       rollup: 3.10.0
       type-fest: 3.5.2
+
+  packages/plugin-build-service:
+    specifiers:
+      doain: workspace:*
+      rollup-plugin-external-globals: ^0.7.1
+    dependencies:
+      doain: link:../doain
+      rollup-plugin-external-globals: 0.7.1
 
   packages/plugin-layout-skeleton:
     specifiers:
@@ -193,6 +197,7 @@ importers:
     specifiers:
       '@charrue/schema-form-next': ^1.0.0
       '@charrue/toolkit': ^0.14.1
+      '@doain/plugin-build-service': workspace:*
       '@doain/plugin-layout-skeleton': workspace:*
       '@doain/toolkit': workspace:*
       doain: workspace:*
@@ -209,6 +214,7 @@ importers:
       vue-router: 4.1.6_vue@3.2.45
     devDependencies:
       '@charrue/toolkit': 0.14.1
+      '@doain/plugin-build-service': link:../packages/plugin-build-service
       '@doain/plugin-layout-skeleton': link:../packages/plugin-layout-skeleton
       doain: link:../packages/doain
       element-plus: 2.2.28_vue@3.2.45
@@ -1174,7 +1180,6 @@ packages:
       '@types/estree': 1.0.0
       estree-walker: 2.0.2
       picomatch: 2.3.1
-    dev: true
 
   /@rollup/pluginutils/5.0.2_rollup@3.10.0:
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
@@ -1322,12 +1327,6 @@ packages:
       '@types/express-serve-static-core': 4.17.32
       '@types/qs': 6.9.7
       '@types/serve-static': 1.15.0
-    dev: true
-
-  /@types/fs-extra/9.0.13:
-    resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
-    dependencies:
-      '@types/node': 18.11.18
     dev: true
 
   /@types/js-levenshtein/1.1.1:
@@ -3247,6 +3246,12 @@ packages:
   /estree-walker/2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
 
+  /estree-walker/3.0.3:
+    resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
+    dependencies:
+      '@types/estree': 1.0.0
+    dev: false
+
   /esutils/2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
@@ -3841,6 +3846,12 @@ packages:
   /is-potential-custom-element-name/1.0.1:
     resolution: {integrity: sha512-bCYeRA2rVibKZd+s2625gGnGF/t7DSqDs4dP7CrLA1m7jKWz6pps0LpYLJN8Q64HtmPKJ1hrN3nzPNKFEKOUiQ==}
     dev: true
+
+  /is-reference/3.0.1:
+    resolution: {integrity: sha512-baJJdQLiYaJdvFbJqXrcGv3WU3QCzBlUcI5QhbesIm6/xPsvmO+2CDoi/GMOFBQEQm+PXkwOPrp9KK5ozZsp2w==}
+    dependencies:
+      '@types/estree': 1.0.0
+    dev: false
 
   /is-regex/1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
@@ -4889,6 +4900,17 @@ packages:
     dependencies:
       glob: 7.2.3
     dev: true
+
+  /rollup-plugin-external-globals/0.7.1:
+    resolution: {integrity: sha512-3U2OBhCa/D57P2SA9fx1CGS1xi9h7x7L3+nnAJ0563nIucQysHQdebfKYoI+2WZVkRdVuZKh4M+rgoF0B5W9Ag==}
+    peerDependencies:
+      rollup: ^2.25.0 || ^3.3.0
+    dependencies:
+      '@rollup/pluginutils': 5.0.2
+      estree-walker: 3.0.3
+      is-reference: 3.0.1
+      magic-string: 0.26.7
+    dev: false
 
   /rollup-plugin-visualizer/5.9.0_rollup@3.10.0:
     resolution: {integrity: sha512-bbDOv47+Bw4C/cgs0czZqfm8L82xOZssk4ayZjG40y9zbXclNk7YikrZTDao6p7+HDiGxrN0b65SgZiVm9k1Cg==}

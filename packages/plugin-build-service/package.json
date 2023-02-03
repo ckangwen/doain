@@ -1,0 +1,28 @@
+{
+  "name": "@doain/plugin-build-service",
+  "version": "0.0.1",
+  "description": "doain插件,优化打包",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsup"
+  },
+  "dependencies": {
+    "doain": "workspace:*",
+    "rollup-plugin-external-globals": "^0.7.1"
+  },
+  "keywords": [
+    "doain",
+    "doain-plugin"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ckangwen/doain",
+    "directory": "packages/plugin-import-map"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
