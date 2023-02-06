@@ -1,6 +1,6 @@
 {
   "name": "doain",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "类Vitepress架构的后台管理系统的框架,将琐碎的配置与工具函数封装与内部",
   "keywords": [
     "doain",
