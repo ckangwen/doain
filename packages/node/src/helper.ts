@@ -1,10 +1,7 @@
-import _debug from "debug";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 export const APP_NAME = "doain";
-
-export const createDebug = (name: string) => {
-  return _debug(`${APP_NAME}:${name}`);
-};
 
 export const cleanUrl = (url: string): string => url.replace(/#.*$/s, "").replace(/\?.*$/s, "");
 
@@ -22,4 +19,4 @@ export type DeepRequired<T> = T extends Primitive
         : DeepRequired<T[P]>;
     };
 
-export const isObj = (val: unknown): val is Record<string, unknown> => typeof val === "object";
+export const currentDir = dirname(fileURLToPath(import.meta.url));

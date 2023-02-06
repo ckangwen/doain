@@ -1,16 +1,19 @@
-import { simpleDeepMerge } from "@charrue/toolkit";
+import { isObj, simpleDeepMerge } from "@charrue/toolkit";
 import { Awaitable } from "@charrue/types";
 import { existsSync } from "fs";
 import { resolve } from "path";
+import { OutputPlugin } from "rollup";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import {
   BuildOptions,
+  PluginOption,
   UserConfigExport,
   loadConfigFromFile,
   mergeConfig as mergeViteConfig,
   normalizePath,
 } from "vite";
 
+import { createExternalDoainPlugin } from "../plugin/external-globals-plugin";
 import { BuiltPlugins, Command, HtmlOptions, ResolvedConfig, UserConfig } from "./types";
 
 export const mergeDefaultConfig = (userConfig: UserConfig, root: string): ResolvedConfig => {
@@ -79,6 +82,23 @@ export const mergeDefaultConfig = (userConfig: UserConfig, root: string): Resolv
 const mergeConfig = <T extends UserConfig>(source: T, target: UserConfig): ResolvedConfig => {
   const result = simpleDeepMerge(source, target) as ResolvedConfig;
   result.vite = mergeViteConfig(source.vite || {}, target.vite || {});
+
+  const plugins: PluginOption[] = [];
+
+  const existPluginNames: string[] = [];
+  result.vite.plugins?.forEach((plugin) => {
+    if (isObj(plugin) && plugin.name) {
+      if (!existPluginNames.includes((plugin as OutputPlugin).name)) {
+        existPluginNames.push((plugin as OutputPlugin).name);
+        plugins.push(plugin);
+      }
+    } else {
+      plugins.push(plugin);
+    }
+  });
+
+  result.vite.plugins = plugins;
+
   return result;
 };
 
@@ -128,13 +148,18 @@ export const resolveDoainConfig = async (options: {
   const { root, command = "dev" } = options;
   const [userConfig, configPath, configDeps] = await resolveUserConfig(root, command);
   let userConfigWithDefaults = mergeDefaultConfig(userConfig, root);
+  const doainPlugins = userConfig.plugins
+    ? userConfig.plugins.concat([createExternalDoainPlugin(root)])
+    : [createExternalDoainPlugin(root)];
   const plugins =
-    userConfig.plugins?.filter((item) => {
+    doainPlugins.filter((item) => {
       return item.command === command || !item.command;
     }) || [];
+  let pluginConfig: UserConfig = {};
   plugins?.forEach((item) => {
-    userConfigWithDefaults = mergeConfig(userConfigWithDefaults, item);
+    pluginConfig = mergeConfig(pluginConfig, item);
   });
+  userConfigWithDefaults = mergeConfig(userConfigWithDefaults, pluginConfig);
 
   return {
     ...userConfigWithDefaults,
