@@ -41,9 +41,9 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@charrue/layout-next": "^1.0.4",
-    "@charrue/schema-form-next": "^1.0.0",
-    "@charrue/schema-table-next": "^1.0.2",
+    "@charrue/layout-next": "^1.0.5",
+    "@charrue/schema-form-next": "^1.0.1",
+    "@charrue/schema-table-next": "^1.0.3",
     "@charrue/toolkit": "^0.14.1",
     "@doain/toolkit": "workspace:latest",
     "@vueuse/core": "^9.6.0",
