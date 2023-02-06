@@ -9,8 +9,8 @@
     "preview": "doain preview"
   },
   "dependencies": {
-    "@charrue/schema-form-next": "^1.0.0",
-    "@doain/toolkit": "workspace:*",
+    "@charrue/schema-form-next": "^1.0.1",
+    "element-plus": "^2.1.11",
     "pinia": "^2.0.26",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
@@ -18,8 +18,8 @@
   "devDependencies": {
     "@charrue/toolkit": "^0.14.1",
     "@doain/plugin-layout-skeleton": "workspace:*",
+    "@doain/toolkit": "workspace:*",
     "doain": "workspace:*",
-    "element-plus": "^2.1.11",
     "sass": "^1.57.1"
   }
 }
