@@ -32,11 +32,11 @@
   "devDependencies": {
     "@charrue/layout-next": "^1.0.2",
     "@charrue/toolkit": "^0.14.1",
-    "@types/qs": "^6.9.7",
-    "element-plus": "^2.1.11",
-    "vue-router": "^4.1.6"
+    "@types/qs": "^6.9.7"
   },
   "dependencies": {
+    "element-plus": "^2.1.11",
+    "vue-router": "^4.1.6",
     "axios": "^0.26.1",
     "mitt": "^3.0.0",
     "pinia": "^2.0.26",
