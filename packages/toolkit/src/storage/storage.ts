@@ -1,4 +1,7 @@
+import { DoainClientConfig } from "../config/index";
+
 const DEFAULT_CACHE_TIME = 60 * 60 * 24 * 7;
+const ONE_SECOND = 1000;
 
 export interface IStorage {
   getItem: (key: string) => string | null;
@@ -15,8 +18,9 @@ interface StorageOptions {
 class StorageLike {
   prefix = "";
   private storage: IStorage;
-  private cacheExpireTime: number | null = DEFAULT_CACHE_TIME;
   private cachedKeys: string[] = [];
+  private expireTimeConfig: NonNullable<DoainClientConfig["app"]["expireTime"]> =
+    DEFAULT_CACHE_TIME;
 
   constructor(options: StorageOptions) {
     this.prefix = options.prefix || "";
@@ -27,13 +31,37 @@ class StorageLike {
     this.prefix = p;
   }
 
-  setExpire(time: number | null) {
-    this.cacheExpireTime = time;
+  // TODO: memoize
+  getExpire(key?: string) {
+    if (typeof this.expireTimeConfig === "number") {
+      return this.expireTimeConfig;
+    }
+
+    if (!key) {
+      return this.expireTimeConfig["*"] || DEFAULT_CACHE_TIME;
+    }
+
+    return this.expireTimeConfig[key] || this.expireTimeConfig["*"] || DEFAULT_CACHE_TIME;
   }
-  set(key: string, value: any, expire: number | null = this.cacheExpireTime) {
+
+  /**
+   * 设置过期时间
+   * @param value number | { [key: string]: number } 单位秒
+   */
+  setExpire(value: typeof this.expireTimeConfig) {
+    this.expireTimeConfig = value;
+  }
+
+  /**
+   * 更新storage
+   * @param key {string} key
+   * @param value {any} value 要存储的值
+   * @param expire {number | null} 过期时间，单位秒
+   */
+  set(key: string, value: any, expire: number | null = this.getExpire(key)) {
     const storageValue = JSON.stringify({
       value,
-      expire: expire !== null ? new Date().getTime() + expire * 1000 : null,
+      expire: expire !== null ? new Date().getTime() + expire * ONE_SECOND : null,
     });
 
     this.storage.setItem(this.getStorageKey(key), storageValue);

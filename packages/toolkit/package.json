@@ -25,22 +25,25 @@
     "dev": "tsup",
     "test": "vitest"
   },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+  "dependencies": {
+    "axios": "^0.26.1",
+    "element-plus": "^2.1.11",
+    "js-cookie": "^3.0.1",
+    "mitt": "^3.0.0",
+    "pinia": "^2.0.26",
+    "qs": "^6.11.0",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@charrue/layout-next": "^1.0.2",
     "@charrue/toolkit": "^0.14.1",
-    "@types/qs": "^6.9.7"
+    "@types/js-cookie": "^3.0.2",
+    "@types/qs": "^6.9.7",
+    "jsdom": "^20.0.3"
   },
-  "dependencies": {
-    "element-plus": "^2.1.11",
-    "vue-router": "^4.1.6",
-    "axios": "^0.26.1",
-    "mitt": "^3.0.0",
-    "pinia": "^2.0.26",
-    "qs": "^6.11.0",
-    "vue": "^3.2.45"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

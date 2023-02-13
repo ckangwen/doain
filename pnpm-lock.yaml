@@ -172,9 +172,12 @@ importers:
     specifiers:
       '@charrue/layout-next': ^1.0.2
       '@charrue/toolkit': ^0.14.1
+      '@types/js-cookie': ^3.0.2
       '@types/qs': ^6.9.7
       axios: ^0.26.1
       element-plus: ^2.1.11
+      js-cookie: ^3.0.1
+      jsdom: ^20.0.3
       mitt: ^3.0.0
       pinia: ^2.0.26
       qs: ^6.11.0
@@ -183,6 +186,7 @@ importers:
     dependencies:
       axios: 0.26.1
       element-plus: 2.2.29_vue@3.2.47
+      js-cookie: 3.0.1
       mitt: 3.0.0
       pinia: 2.0.30_vue@3.2.47
       qs: 6.11.0
@@ -191,7 +195,9 @@ importers:
     devDependencies:
       '@charrue/layout-next': 1.0.5
       '@charrue/toolkit': 0.14.1
+      '@types/js-cookie': 3.0.2
       '@types/qs': 6.9.7
+      jsdom: 20.0.3
 
   playground:
     specifiers:
@@ -1328,6 +1334,10 @@ packages:
       '@types/express-serve-static-core': 4.17.33
       '@types/qs': 6.9.7
       '@types/serve-static': 1.15.0
+    dev: true
+
+  /@types/js-cookie/3.0.2:
+    resolution: {integrity: sha512-6+0ekgfusHftJNYpihfkMu8BWdeHs9EOJuGcSofErjstGPfPGEu9yTu4t460lTzzAMl2cM5zngQJqPMHbbnvYA==}
     dev: true
 
   /@types/js-levenshtein/1.1.1:
@@ -3938,6 +3948,11 @@ packages:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
     engines: {node: '>=10'}
     dev: true
+
+  /js-cookie/3.0.1:
+    resolution: {integrity: sha512-+0rgsUXZu4ncpPxRL+lNEptWMOWl9etvPHc/koSRp6MPwpRYAhmk0dUG00J4bxVV3r9uUzfo24wW0knS07SKSw==}
+    engines: {node: '>=12'}
+    dev: false
 
   /js-levenshtein/1.1.6:
     resolution: {integrity: sha512-X2BB11YZtrRqY4EnQcLX5Rh373zbK4alC1FW7D7MBhL2gtcC17cTnr6DmfHZeS0s2rTHjUTMMHfG7gO8SSdw+g==}

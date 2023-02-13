@@ -253,6 +253,10 @@ export const defineClientConfig = <T extends DoainDefaultUserInfo = DoainDefault
 
   lStorage.setPrefix(config.app.appKey || config.app.storageKey || "");
   sStorage.setPrefix(config.app.appKey || config.app.storageKey || "");
+  if (config.app.expireTime) {
+    lStorage.setExpire(config.app.expireTime);
+    sStorage.setExpire(config.app.expireTime);
+  }
   return config;
 };
 
