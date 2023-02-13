@@ -2,9 +2,9 @@ import { CharrueLayout } from "@charrue/layout-next";
 import mitt, { EventType } from "mitt";
 import type { RouteLocationRaw } from "vue-router";
 
-import { HttpClientResponse, httpClient } from "./request/index";
-import { lStorage, sStorage } from "./storage";
-import { DoainDefaultUserInfo } from "./types";
+import { HttpClientResponse, httpClient } from "../request/index";
+import { lStorage, sStorage } from "../storage/index";
+import { DoainDefaultUserInfo } from "../types";
 
 type LayoutProps = InstanceType<typeof CharrueLayout>["$props"];
 
@@ -15,6 +15,20 @@ interface AppConfig {
    * @defaultValue appKey
    */
   storageKey?: string;
+
+  /**
+   * 存储在localStorage、sessionStorage的数据的过期时间
+   * 单位是秒
+   * 默认是7天
+   *
+   * 可以传入一个数字或者一个对象
+   * 如果是数字，那么所有的数据都会使用这个过期时间
+   * 如果是对象，那么可以根据key来设置不同的过期时间
+   * 传入"*"表示所有的key都会使用这个过期时间
+   *
+   * @defaultValue 7 * 24 * 60 * 60
+   */
+  expireTime?: number | Record<string | "*", number>;
 }
 interface LayoutConfig {
   data: NonNullable<LayoutProps["data"]>;
@@ -242,13 +256,24 @@ export const defineClientConfig = <T extends DoainDefaultUserInfo = DoainDefault
   return config;
 };
 
-export function getDoainClientConfig() {
+export const getDoainClientConfig = () => {
   return globalDoainConfig.config;
-}
+};
 
-export function subscribeDoainClientConfigKey<N extends ConfigKey>(
+export const getDoainClientConfigByKey = <N extends ConfigKey>(name: N) => {
+  return globalDoainConfig.get(name);
+};
+
+export const defineClientConfigByKey = <N extends ConfigKey>(
+  name: N,
+  value: DoainConfigValueOf<N>,
+) => {
+  globalDoainConfig.set(name, value);
+};
+
+export const subscribeDoainClientConfigKey = <N extends ConfigKey>(
   name: N,
   cb: (config: N extends ConfigKey ? DoainConfigValueOf<N> : DoainClientConfig) => void,
-) {
+) => {
   globalDoainConfig.subscribe(name, cb);
-}
+};
