@@ -18,14 +18,18 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "index.css",
+    "styles"
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup",
+    "build:style": "gulp --gulpfile ./scripts/build-style.js",
+    "dev": "tsup --watch && npm run dev:style",
+    "dev:style": "gulp --gulpfile ./scripts/build-style.js --watch",
     "test": "vitest"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "axios": "^0.26.1",
     "element-plus": "^2.1.11",
     "js-cookie": "^3.0.1",
@@ -40,7 +44,14 @@
     "@charrue/toolkit": "^0.14.1",
     "@types/js-cookie": "^3.0.2",
     "@types/qs": "^6.9.7",
-    "jsdom": "^20.0.3"
+    "browserslist": "^4.21.5",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-sass": "^5.1.0",
+    "jsdom": "^20.0.3",
+    "sass": "^1.57.1"
   },
   "publishConfig": {
     "access": "public",
