@@ -1,21 +1,19 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 import { has, to } from "@charrue/toolkit";
-import type { AxiosInstance, AxiosRequestConfig, Method } from "axios";
+import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import axios from "axios";
 import mitt from "mitt";
 import type { Emitter } from "mitt";
 
-import { getToken } from "../token";
+import { getToken } from "../storage/token";
 import { FetchResponse } from "../types";
-import { getResponseData, stringifyData } from "./interceptors";
+import { getResponseData, stringifyData, validateUrl } from "./interceptors";
 
 type Event = Record<string, any>;
 const ONE_SECOND = 1000;
 
-interface RequestOption {
+interface RequestOption extends AxiosRequestConfig {
   url: string;
-  data?: any;
-  method?: Method;
 }
 
 export interface HttpClientResponse<T = any> {
@@ -132,6 +130,7 @@ export class HttpClient {
   private setupInterceptors = (service: AxiosInstance) => {
     service.interceptors.request.use(this.cancelRequestInterceptor);
     service.interceptors.request.use(this.tokenGuardInterceptor);
+    service.interceptors.request.use(validateUrl);
     service.interceptors.request.use(stringifyData);
     service.interceptors.response.use(getResponseData);
   };
@@ -262,3 +261,8 @@ export class HttpClient {
     this.emitter.on(url, callback);
   };
 }
+
+export const httpClient = new HttpClient({
+  baseUrl: "",
+  tokenWhiteList: [],
+});

@@ -2,8 +2,8 @@ import { CharrueLayout } from "@charrue/layout-next";
 import mitt, { EventType } from "mitt";
 import type { RouteLocationRaw } from "vue-router";
 
-import { HttpClientResponse, httpClient } from "../request/index";
-import { lStorage, sStorage } from "../storage/index";
+import { HttpClientResponse, httpClient } from "../request/HttpClient";
+import { lStorage, sStorage } from "../storage/storage";
 import { DoainDefaultUserInfo } from "../types";
 
 type LayoutProps = InstanceType<typeof CharrueLayout>["$props"];
@@ -84,6 +84,10 @@ interface ComponentConfig {
   paginationView?: {
     formatColumnValue?: (key: string, value: any) => any;
     formatQueryValue?: (key: string, value: any) => any;
+  };
+  upload?: {
+    url: string;
+    transformImageUrl: (data: HttpClientResponse) => string;
   };
 }
 
@@ -194,6 +198,7 @@ class GlobalDoainConfig {
       ...(config.layout || {}),
     });
     this.set("store", config.store);
+    this.set("component", config.component || {});
     this.set("fetch", config.fetch);
     this.set("router", {
       ...defaultDoainClientConfig.layout,
@@ -236,34 +241,6 @@ interface Context {
   sStorage: typeof sStorage;
 }
 
-export const defineClientConfig = <T extends DoainDefaultUserInfo = DoainDefaultUserInfo>(
-  cb: (context: Context) => DoainClientConfig<T>,
-) => {
-  const config = cb({
-    httpClient,
-    lStorage,
-    sStorage,
-  });
-  globalDoainConfig.defineDoainConfig(config);
-
-  httpClient.resetAxiosInstance({
-    baseUrl: config.fetch.baseUrl,
-    tokenWhiteList: config.fetch.tokenWhiteList || [],
-  });
-
-  lStorage.setPrefix(config.app.appKey || config.app.storageKey || "");
-  sStorage.setPrefix(config.app.appKey || config.app.storageKey || "");
-  if (config.app.expireTime) {
-    lStorage.setExpire(config.app.expireTime);
-    sStorage.setExpire(config.app.expireTime);
-  }
-  return config;
-};
-
-export const getDoainClientConfig = () => {
-  return globalDoainConfig.config;
-};
-
 export const getDoainClientConfigByKey = <N extends ConfigKey>(name: N) => {
   return globalDoainConfig.get(name);
 };
@@ -280,4 +257,28 @@ export const subscribeDoainClientConfigKey = <N extends ConfigKey>(
   cb: (config: N extends ConfigKey ? DoainConfigValueOf<N> : DoainClientConfig) => void,
 ) => {
   globalDoainConfig.subscribe(name, cb);
+};
+
+export const defineClientConfig = <T extends DoainDefaultUserInfo = DoainDefaultUserInfo>(
+  cb: (context: Context) => DoainClientConfig<T>,
+) => {
+  const config = cb({
+    httpClient,
+    lStorage,
+    sStorage,
+  });
+  globalDoainConfig.defineDoainConfig(config);
+
+  return config;
+};
+
+const globalClientConfig = globalDoainConfig.config;
+Object.keys(globalClientConfig).forEach((key) => {
+  subscribeDoainClientConfigKey(key as ConfigKey, (config) => {
+    (globalClientConfig as any)[key] = config;
+  });
+});
+
+export const getDoainClientConfig = () => {
+  return globalClientConfig;
 };

@@ -4,6 +4,6 @@ export default defineConfig({
   entry: ["./src/index.ts"],
   dts: true,
   clean: true,
-  format: ["esm"],
-  target: "node14",
+  format: ["esm", "cjs"],
+  treeshake: true,
 });

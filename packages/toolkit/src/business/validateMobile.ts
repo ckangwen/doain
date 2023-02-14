@@ -9,7 +9,10 @@ const MOBILE_RE = /^1[3456789]\d{9}$/;
 
 export const isMobile = (str: string): boolean => MOBILE_RE.test(str);
 
-const validateMobile = (value: string): ValidateResponse => {
+/**
+ * @internal
+ */
+export const validateMobile = (value: string): ValidateResponse => {
   const valueNoWhitespace = value?.replace(/\s/g, "");
   const validateResponse = {
     success: false,

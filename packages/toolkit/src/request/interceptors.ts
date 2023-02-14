@@ -17,4 +17,15 @@ export const stringifyData = (axiosConfig: AxiosRequestConfig) => {
   return axiosConfig;
 };
 
+export const validateUrl = (axiosConfig: AxiosRequestConfig) => {
+  const { url } = axiosConfig;
+  // 是否以 https:// 或 http:// 开始
+  if (url?.startsWith("https://") || url?.startsWith("http://")) {
+    axiosConfig.baseURL = "";
+    axiosConfig.url = url;
+  }
+
+  return axiosConfig;
+};
+
 export const getResponseData = (response: AxiosResponse) => response.data;

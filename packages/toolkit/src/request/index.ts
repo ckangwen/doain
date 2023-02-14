@@ -1,9 +1,12 @@
-import { HttpClient } from "./HttpClient";
+import { subscribeDoainClientConfigKey } from "../config/index";
+import { HttpClient, httpClient } from "./HttpClient";
 import type { HttpClientResponse } from "./HttpClient";
 
-const httpClient = new HttpClient({
-  baseUrl: "",
-  tokenWhiteList: [],
+subscribeDoainClientConfigKey("fetch", (config) => {
+  httpClient.resetAxiosInstance({
+    baseUrl: config.baseUrl,
+    tokenWhiteList: config.tokenWhiteList || [],
+  });
 });
 
 export { HttpClient, httpClient };

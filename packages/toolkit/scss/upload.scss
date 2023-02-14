@@ -1,0 +1,108 @@
+.doain-upload {
+  &-root {
+    &.doain-upload-root--default {
+      border: 1px dashed var(--el-border-color);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: var(--el-transition-duration-fast);
+      text-align: center;
+      vertical-align: top;
+      background-color: rgba(0, 0, 0, .02);
+      border-radius: 8px;
+    }
+  }
+
+  &-uploading {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    --image: inherit;
+    --filter: 0;
+
+    &::before {
+      content: " ";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: var(--image);
+      background-size: cover;
+      filter: blur(var(--filter));
+    }
+
+    &__progress {
+      width: 100%;
+    }
+  }
+
+  &-success {}
+
+  &-el {
+    width: 100%;
+    height: 100%;
+
+    .el-upload {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    user-select: none;
+
+    &__text {
+      margin-top: 8px;
+      color: inherit;
+      font-size: 14px;
+      line-height: 1.5714285714285714;
+      list-style: none;
+
+      &:active {
+        color: var(--el-color-primary);
+      }
+    }
+  }
+
+  &-actions {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    opacity: 0;
+    font-size: 20px;
+    background-color: var(--el-overlay-color-lighter);
+    transition: opacity var(--el-transition-duration);
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &__delete {
+      display: inline-flex;
+      cursor: pointer;
+    }
+
+    &__preview {
+      display: inline-flex;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+  }
+}

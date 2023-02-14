@@ -3,9 +3,9 @@ import { ElNotification, NotificationOptions } from "element-plus";
 import { computed, ref } from "vue";
 
 import { getDoainClientConfig } from "../config";
-import { httpClient } from "../request/index";
+import { httpClient } from "../request/HttpClient";
+import { setToken } from "../storage/token";
 import { useUserStore } from "../store/index";
-import { setToken } from "../token";
 import { useRouter } from "./useRouter";
 
 type FormValue = Record<string, any>;

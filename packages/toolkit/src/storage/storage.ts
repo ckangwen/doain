@@ -1,4 +1,4 @@
-import { DoainClientConfig } from "../config/index";
+import { DoainClientConfig, subscribeDoainClientConfigKey } from "../config/index";
 
 const DEFAULT_CACHE_TIME = 60 * 60 * 24 * 7;
 const ONE_SECOND = 1000;
@@ -114,4 +114,14 @@ export const lStorage = new StorageLike({
 export const sStorage = new StorageLike({
   storage: sessionStorage,
   prefix: "",
+});
+
+subscribeDoainClientConfigKey?.("app", (config) => {
+  const storageKey = config.storageKey || config.appKey || "";
+  const expireTime = config.expireTime || DEFAULT_CACHE_TIME;
+
+  lStorage.setPrefix(storageKey);
+  sStorage.setPrefix(storageKey);
+  lStorage.setExpire(expireTime);
+  sStorage.setExpire(expireTime);
 });
