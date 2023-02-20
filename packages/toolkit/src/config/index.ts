@@ -32,6 +32,7 @@ interface AppConfig {
 }
 interface LayoutConfig {
   data: NonNullable<LayoutProps["data"]>;
+  transitionName?: string;
   collapse?: LayoutProps["collapse"];
   fixedHeader?: LayoutProps["fixedHeader"];
   showTrigger?: LayoutProps["showTrigger"];

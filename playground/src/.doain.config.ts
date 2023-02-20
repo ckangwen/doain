@@ -19,7 +19,23 @@ export default defineClientConfig<GlobalUserInfo>(({ httpClient }) => {
           path: "/account/user-info",
           title: "UserInfo",
         },
+        {
+          title: "Demo01",
+          path: "/demo/demo01",
+        },
+        {
+          title: "Demo02",
+          path: "/demo/demo02",
+        },
       ],
+    },
+    component: {
+      upload: {
+        url: "http://150.158.181.150/api/mock-api/tool/upimg",
+        transformImageUrl(data: Record<string, any>) {
+          return data.url;
+        },
+      }
     },
     store: {
       formatUserData(data) {
@@ -32,7 +48,7 @@ export default defineClientConfig<GlobalUserInfo>(({ httpClient }) => {
       },
     },
     fetch: {
-      baseUrl: "http://150.158.181.150/mock-api/",
+      baseUrl: "http://150.158.181.150/api/mock-api/",
       tokenWhiteList: [LOGIN_URL],
       fetchUserInfo() {
         return httpClient.limitRepeatedRequest({

@@ -1,14 +1,15 @@
 import userClientConfig from "~doain/clientConfig";
 
 import { CharrueLayout } from "@charrue/layout-next";
-import { defineComponent, ref } from "vue";
-import { RouterView } from "vue-router";
+import { DoainClientConfig } from "@doain/toolkit";
+import { KeepAlive, Transition, defineComponent, ref } from "vue";
+import { RouterView, useRouter } from "vue-router";
 
 import HeaderRight from "./HeaderRight";
 import { NavigationTab } from "./NavigationTab/index";
 
-export const GlobalLayout = defineComponent({
-  name: "GlobalLayout",
+export const DefaultLayout = defineComponent({
+  name: "DefaultLayout",
   setup() {
     const collapse = ref(false);
     return {
@@ -16,7 +17,14 @@ export const GlobalLayout = defineComponent({
     };
   },
   render() {
-    const layoutConfig = userClientConfig.layout || ({} as any);
+    const layoutConfig: DoainClientConfig["layout"] = userClientConfig.layout;
+    const keepAliveRoutes = useRouter()
+      .getRoutes()
+      .filter((route) => route.meta?.keepAlive)
+      ?.map((item: any) => {
+        return item?.components?.default?.__name;
+      })
+      ?.filter((name) => name);
 
     return (
       <div class="global-layout-container">
@@ -30,7 +38,21 @@ export const GlobalLayout = defineComponent({
         >
           {{
             "header-right": () => <HeaderRight />,
-            default: () => <RouterView></RouterView>,
+            default: () => (
+              <RouterView>
+                {{
+                  default({ Component }: { Component: any }) {
+                    return (
+                      <Transition name={layoutConfig.transitionName}>
+                        <KeepAlive include={keepAliveRoutes}>
+                          <Component />
+                        </KeepAlive>
+                      </Transition>
+                    );
+                  },
+                }}
+              </RouterView>
+            ),
             "content-header": () =>
               userClientConfig?.enableNavigationTab ? <NavigationTab></NavigationTab> : [],
           }}

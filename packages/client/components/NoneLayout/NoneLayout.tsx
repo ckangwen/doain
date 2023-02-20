@@ -1,11 +1,11 @@
 import { defineComponent } from "vue";
 import { RouterView } from "vue-router";
 
-export const GlobalPureLayout = defineComponent({
-  name: "GlobalPureLayout",
+export const NoneLayout = defineComponent({
+  name: "NoneLayout",
   render() {
     return (
-      <div class="global-pure-layout">
+      <div class="global-none-layout">
         <RouterView></RouterView>
       </div>
     );

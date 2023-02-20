@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-const msg = ref("message");
+import { DUpload } from "@doain/toolkit";
+
+const imageUrl = "https://s2.loli.net/2023/01/12/a4ImQMsgHkbxtJL.jpg";
 </script>
 
 <template>
-  <h1 class="flex justify-center text-lg">Hello, {{ msg }}</h1>
+  <DUpload v-model="imageUrl" />
 </template>
