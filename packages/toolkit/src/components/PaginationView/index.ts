@@ -1,0 +1,1 @@
+export { PaginationView } from "./PaginationView";

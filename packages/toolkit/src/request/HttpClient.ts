@@ -6,7 +6,6 @@ import mitt from "mitt";
 import type { Emitter } from "mitt";
 
 import { getToken } from "../storage/token";
-import { FetchResponse } from "../types";
 import { getResponseData, stringifyData, validateUrl } from "./interceptors";
 
 type Event = Record<string, any>;
@@ -228,7 +227,7 @@ export class HttpClient {
     const { url, method = "POST", data = {} } = options;
 
     const [res, err] = await to(
-      this.axiosInstance!.request<FetchResponse, FetchResponse>({
+      this.axiosInstance!.request<Doain.FetchResponse, Doain.FetchResponse>({
         method,
         url,
         data,
@@ -256,7 +255,7 @@ export class HttpClient {
 
   subscribe = (
     url: string,
-    callback: (payload: [FetchResponse<any> | undefined, Error | null]) => void,
+    callback: (payload: [Doain.FetchResponse<any> | undefined, Error | null]) => void,
   ) => {
     this.emitter.on(url, callback);
   };

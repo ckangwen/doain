@@ -1,4 +1,5 @@
 import { CharrueLayout } from "@charrue/layout-next";
+import { FormProps, TableProps } from "element-plus";
 import mitt, { EventType } from "mitt";
 import type { RouteLocationRaw } from "vue-router";
 
@@ -83,6 +84,8 @@ interface FetchConfig {
 
 interface ComponentConfig {
   paginationView?: {
+    formProps?: Partial<Omit<FormProps, "model">>;
+    tableProps?: Partial<Omit<TableProps<unknown>, "data">>;
     formatColumnValue?: (key: string, value: any) => any;
     formatQueryValue?: (key: string, value: any) => any;
   };
