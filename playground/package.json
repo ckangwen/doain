@@ -16,6 +16,7 @@
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
+    "@charrue/schema-table-next": "^1.0.3",
     "@charrue/toolkit": "^0.14.1",
     "@doain/plugin-layout-skeleton": "workspace:*",
     "@doain/toolkit": "workspace:*",

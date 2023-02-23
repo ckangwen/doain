@@ -27,6 +27,10 @@ export default defineClientConfig<GlobalUserInfo>(({ httpClient }) => {
           title: "Demo02",
           path: "/demo/demo02",
         },
+        {
+          title: "Demo03",
+          path: "/demo/demo03",
+        },
       ],
     },
     component: {

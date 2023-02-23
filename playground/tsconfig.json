@@ -4,7 +4,10 @@
     "baseUrl": ".",
     "types": [
       "doain/global"
-    ]
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["./src/**/*.ts", "./src/**/*.d.ts", "./src/**/*.tsx", "./src/**/*.vue", "./*.ts", ".doain/*.ts"],
   "exclude": ["node_modules"]
