@@ -1,24 +1,16 @@
 import { CharrueSchemaForm, FormSchemaDef } from "@charrue/schema-form-next";
 import { CharrueSchemaTable } from "@charrue/schema-table-next";
 import { useVModel } from "@vueuse/core";
-import { PropType, computed, defineComponent, h } from "vue";
+import { PropType, computed, defineComponent, h, ref } from "vue";
 
-import { getDoainClientConfig } from "../../config/index";
+import { ComponentConfig, getDoainClientConfig } from "../../config/index";
+import { useInternalPaginationView } from "./usePaginationView";
 import { useTable } from "./useTable";
 
 const paginationViewConfig = getDoainClientConfig().component?.paginationView || {};
 
-// const defaultTableProps = {
-//   tableProps: {
-//     size: "medium",
-//     "header-row-class-name": "global-header-row-class",
-//   },
-//   index: true,
-//   indexHeader: "序号",
-//   indexProps: {
-//     width: "80px",
-//   },
-// };
+type DFormProps = NonNullable<NonNullable<ComponentConfig["paginationView"]>["formProps"]>;
+type DTableProps = NonNullable<NonNullable<ComponentConfig["paginationView"]>["tableProps"]>;
 
 export const PaginationView = defineComponent({
   name: "PaginationView",
@@ -70,13 +62,26 @@ export const PaginationView = defineComponent({
     formatSearchData: {
       type: Function as PropType<(data: Record<string, any>) => Record<string, any>>,
     },
+    formProps: {
+      type: Object as PropType<DFormProps>,
+      default() {
+        return {};
+      },
+    },
+    tableProps: {
+      type: Object as PropType<DTableProps>,
+      default() {
+        return {};
+      },
+    },
   },
   setup(props, { emit, expose }) {
+    const schemaTableRef = ref();
+    const schemaFormRef = ref();
     const innerValue = useVModel(props, "formData", emit);
     const shouldHideForm = computed(() => {
       return Object.keys(props.schema).length === 0;
     });
-    // formData的数据并不适合直接作为参数提交给接口，需要进行转换
     const searchData = computed(() => {
       const defaultValue = {
         ...innerValue.value,
@@ -87,6 +92,8 @@ export const PaginationView = defineComponent({
       }
       return defaultValue;
     });
+
+    const [sharedMethods] = useInternalPaginationView();
 
     const {
       loading,
@@ -101,16 +108,31 @@ export const PaginationView = defineComponent({
       onPageChange,
     } = useTable(searchData);
 
+    sharedMethods.value = {
+      reload: fetchData,
+      getTableData: () => {
+        console.log(tableData, page);
+        return tableData.value;
+      },
+      getSearchData: () => searchData.value,
+      getSchemaFormRef: () => schemaFormRef,
+      getSchemaTableRef: () => schemaTableRef,
+    };
+
     fetchData();
 
     expose({
       fetchData,
       tableData,
       searchData,
+      schemaFormRef,
+      schemaTableRef,
     });
 
     return {
       innerValue,
+      schemaTableRef,
+      schemaFormRef,
       shouldHideForm,
       loading,
       tableData,
@@ -140,7 +162,9 @@ export const PaginationView = defineComponent({
               },
               [
                 h(CharrueSchemaForm, {
+                  ref: "schemaFormRef",
                   ...(paginationViewConfig.formProps || {}),
+                  ...(this.formProps || {}),
                   modelValue: this.innerValue,
                   schema: this.schema,
                   "onUpdate:modelValue": (value) => {
@@ -159,7 +183,9 @@ export const PaginationView = defineComponent({
             h(
               CharrueSchemaTable,
               {
+                ref: "schemaTableRef",
                 ...(paginationViewConfig.tableProps || {}),
+                ...(this.tableProps || {}),
                 columns: this.columns,
                 data: this.tableData,
                 currentPage: this.page,
@@ -184,46 +210,5 @@ export const PaginationView = defineComponent({
         ),
       ],
     );
-
-    // return (
-    //   <div class="pagination-view-root">
-    //     {!this.shouldHideForm && (
-    //       <div class="pagination-view__form">
-    //         <CharrueSchemaForm
-    //           {}
-    //           v-model={this.innerValue}
-    //           schema={this.schema}
-    //         ></CharrueSchemaForm>
-    //       </div>
-    //     )}
-
-    //     <div class="pagination-view__table">
-    //       <CharrueSchemaTable
-    //         v-loading={this.loading}
-    //         {...(paginationViewConfig.tableProps || {})}
-    //         columns={this.columns}
-    //         data={this.tableData}
-    //         currentPage={this.page}
-    //         pageSize={this.pageSize}
-    //         total={this.total}
-    //         showExtraColumn={this.showExtraColumn}
-    //         extraColumnProps={this.extraColumnProps}
-    //         onSize-change={this.onSizeChange}
-    //         onPage-change={this.onPageChange}
-    //         pagination={true}
-    //         {...this.$attrs}
-    //       >
-    //         {{
-    //           header: header
-    //             ? () => {
-    //                 return header({ scope: this.headerScopeData });
-    //               }
-    //             : null,
-    //           ...rest,
-    //         }}
-    //       </CharrueSchemaTable>
-    //     </div>
-    //   </div>
-    // );
   },
 });
