@@ -1,5 +1,3 @@
-@import "./transition.scss";
-
 .cl-logo-container h1 {
   height: var(--cl-header-height);
 }
@@ -20,8 +18,10 @@
   // }
 }
 
-.cl-content__header {
-  height: calc(var(--cl-navigation-tab-height) + var(--cl-navigation-tab-padding-y) * 2);
+.charrue-layout:not(.navigation-tab--hidden) {
+  .cl-content__header {
+    height: calc(var(--cl-navigation-tab-height) + var(--cl-navigation-tab-padding-y) * 2);
+  }
 }
 
 .header-action {

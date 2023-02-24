@@ -29,12 +29,9 @@ export const DefaultLayout = defineComponent({
     return (
       <div class="global-layout-container">
         <CharrueLayout
+          {...layoutConfig}
           v-model={[this.collapse, "collapse"]}
-          data={layoutConfig.data}
-          sidebarWidth={layoutConfig.sidebarWidth}
-          title={layoutConfig.title}
-          logo={layoutConfig.logo}
-          layout={layoutConfig.layout}
+          class={userClientConfig?.enableNavigationTab ? "" : "navigation-tab--hidden"}
         >
           {{
             "header-right": () => <HeaderRight />,
@@ -43,7 +40,7 @@ export const DefaultLayout = defineComponent({
                 {{
                   default({ Component }: { Component: any }) {
                     return (
-                      <Transition name={layoutConfig.transitionName}>
+                      <Transition name={layoutConfig.transitionName} mode="out-in">
                         <KeepAlive include={keepAliveRoutes}>
                           <Component />
                         </KeepAlive>
