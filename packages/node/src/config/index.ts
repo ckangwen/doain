@@ -3,7 +3,6 @@ import { Awaitable } from "@charrue/types";
 import { existsSync } from "fs";
 import { resolve } from "path";
 import { OutputPlugin } from "rollup";
-import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import {
   BuildOptions,
   PluginOption,
@@ -14,6 +13,17 @@ import {
 } from "vite";
 
 import { createExternalDoainPlugin } from "../plugin/external-globals-plugin";
+import {
+  defaultAutoImportOptions,
+  defaultIconOptions,
+  defaultUnocssOptions,
+  defaultVisualizerOptions,
+  defaultVueComponentsOptions,
+  defaultVueJsxOptions,
+  defaultVueOptions,
+  defaultVuePageLayoutOptions,
+  defaultVuePagesOptions,
+} from "../plugin/vite-plugin";
 import { BuiltPlugins, Command, HtmlOptions, ResolvedConfig, UserConfig } from "./types";
 
 export const mergeDefaultConfig = (userConfig: UserConfig, root: string): ResolvedConfig => {
@@ -35,29 +45,15 @@ export const mergeDefaultConfig = (userConfig: UserConfig, root: string): Resolv
   }
 
   const builtPlugins: BuiltPlugins = {
-    vue: mergeBuiltPluginOptions("vue", {}),
-    vueJsx: mergeBuiltPluginOptions("vueJsx", {}),
-    pages: mergeBuiltPluginOptions("pages", {
-      dirs: "src/modules",
-      extensions: ["vue", "tsx"],
-      exclude: ["**/components/*.vue", "**/!(index).tsx"],
-    }),
-    pageLayout: mergeBuiltPluginOptions("pageLayout", {
-      layoutsDirs: "src/layouts",
-      defaultLayout: "default",
-      extensions: ["vue", "tsx"],
-    }),
-    unocss: mergeBuiltPluginOptions("unocss", {}),
-    autoImport: mergeBuiltPluginOptions("autoImport", {
-      include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
-      imports: ["vue", "@vueuse/core"],
-    }),
-    vueComponents: mergeBuiltPluginOptions("vueComponents", {
-      dirs: ["src/components"],
-      extensions: ["vue", "tsx"],
-      resolvers: [ElementPlusResolver()],
-    }),
-    visualizer: mergeBuiltPluginOptions("visualizer", {}),
+    vue: mergeBuiltPluginOptions("vue", defaultVueOptions),
+    vueJsx: mergeBuiltPluginOptions("vueJsx", defaultVueJsxOptions),
+    pages: mergeBuiltPluginOptions("pages", defaultVuePagesOptions),
+    pageLayout: mergeBuiltPluginOptions("pageLayout", defaultVuePageLayoutOptions),
+    unocss: mergeBuiltPluginOptions("unocss", defaultUnocssOptions),
+    autoImport: mergeBuiltPluginOptions("autoImport", defaultAutoImportOptions),
+    vueComponents: mergeBuiltPluginOptions("vueComponents", defaultVueComponentsOptions),
+    visualizer: mergeBuiltPluginOptions("visualizer", defaultVisualizerOptions),
+    icons: mergeBuiltPluginOptions("icons", defaultIconOptions),
   };
   const viteOptions: UserConfigExport = userConfig.vite || {};
   const buildOptions: BuildOptions = userConfig.build || {};

@@ -6,6 +6,7 @@ import type { Options as VuePluginOptions } from "@vitejs/plugin-vue";
 import type { Options as VueJsxPluginOptions } from "@vitejs/plugin-vue-jsx";
 import type { PluginVisualizerOptions } from "rollup-plugin-visualizer";
 import AutoImportPlugin from "unplugin-auto-import/vite";
+import type { Options as IconOptions } from "unplugin-icons/types";
 import type { Options as VueComponentsOptions } from "unplugin-vue-components";
 import { UserConfig as ViteConfig } from "vite";
 import type { BuildOptions } from "vite";
@@ -25,6 +26,7 @@ export interface BuiltPlugins {
   autoImport: AutoImportPluginOptions | false;
   vueComponents: VueComponentsOptions | false;
   visualizer: PluginVisualizerOptions | false;
+  icons: IconOptions | false;
 }
 
 export type HeadConfig =

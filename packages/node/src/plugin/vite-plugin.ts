@@ -7,6 +7,10 @@ import c from "picocolors";
 import _VisualizerPlugin from "rollup-plugin-visualizer";
 import UnocssPlugin from "unocss/vite";
 import AutoImportPlugin from "unplugin-auto-import/vite";
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
+import IconsResolver from "unplugin-icons/resolver";
+import IconsPlugin from "unplugin-icons/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import VueComponentsPlugin from "unplugin-vue-components/vite";
 import { defineConfig as defineViteConfig, mergeConfig } from "vite";
 import type { PluginOption } from "vite";
@@ -19,8 +23,9 @@ import {
   getUserRegisterAppPath,
 } from "../alias";
 import type { Command, ResolvedConfig } from "../config/index";
+import { BuiltPlugins } from "../config/types";
 import { getEntryHtmlContent } from "../entryHtml";
-import { cleanUrl } from "../helper";
+import { NotBool, cleanUrl } from "../helper";
 
 const VisualizerPlugin = (_VisualizerPlugin as any).default || _VisualizerPlugin;
 
@@ -104,6 +109,43 @@ const DoainNodePlugin = (options: {
   };
 };
 
+export const defaultVueOptions: NotBool<BuiltPlugins["vue"]> = {};
+export const defaultVueJsxOptions: NotBool<BuiltPlugins["vueJsx"]> = {};
+export const defaultVuePagesOptions: NotBool<BuiltPlugins["pages"]> = {
+  dirs: "src/modules",
+  extensions: ["vue", "tsx"],
+  exclude: ["**/components/*.vue"],
+};
+export const defaultVuePageLayoutOptions: NotBool<BuiltPlugins["pageLayout"]> = {
+  layoutsDirs: "src/layouts",
+  defaultLayout: "default",
+  extensions: ["vue", "tsx"],
+};
+export const defaultUnocssOptions: NotBool<BuiltPlugins["unocss"]> = {};
+export const defaultAutoImportOptions: NotBool<BuiltPlugins["autoImport"]> = {
+  include: [/\.[tj]sx?$/, /\.vue$/, /\.vue\?vue/],
+  imports: ["vue", "vue-router", "@vueuse/core"],
+};
+export const defaultVueComponentsOptions: NotBool<BuiltPlugins["vueComponents"]> = {
+  dirs: ["src/components"],
+  extensions: ["vue", "tsx"],
+  resolvers: [
+    ElementPlusResolver(),
+    IconsResolver({
+      customCollections: ["custom"],
+    }),
+  ],
+};
+export const defaultVisualizerOptions: NotBool<BuiltPlugins["visualizer"]> = {};
+export const defaultIconOptions: NotBool<BuiltPlugins["icons"]> = {
+  scale: 1,
+  defaultClass: "global-doain-icon",
+  compiler: "vue3",
+  customCollections: {
+    custom: FileSystemIconLoader("src/icons"),
+  },
+};
+
 // eslint-disable-next-line max-statements
 export async function createDoainPlugin(options: {
   config: ResolvedConfig;
@@ -111,8 +153,8 @@ export async function createDoainPlugin(options: {
   command?: Command;
 }): Promise<PluginOption> {
   const { config, recreateServer, command } = options;
-  const { vue, vueJsx, pages, pageLayout, unocss, autoImport, vueComponents, visualizer } =
-    config.builtPlugins || {};
+  const { vue, vueJsx, pages, pageLayout, unocss, autoImport, vueComponents, visualizer, icons } =
+    config.builtPlugins;
 
   const plugins: PluginOption[] = [];
 
@@ -147,6 +189,9 @@ export async function createDoainPlugin(options: {
   }
   if (visualizer !== false) {
     plugins.push(VisualizerPlugin(visualizer));
+  }
+  if (icons !== false) {
+    plugins.push(IconsPlugin(icons));
   }
 
   plugins.push(

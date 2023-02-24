@@ -53,6 +53,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@charrue/node-toolkit": "^0.4.0",
     "@charrue/vite-plugin-pages": "^0.28.0",
     "@charrue/vite-plugin-pages-extend": "^0.1.0",
     "@charrue/vite-plugin-vue-layouts": "^0.8.0",
@@ -70,9 +71,9 @@
     "sirv": "^2.0.2",
     "unocss": "^0.48.3",
     "unplugin-auto-import": "^0.11.4",
+    "unplugin-icons": "^0.15.3",
     "unplugin-vue-components": "^0.22.9",
     "vite": "^4.0.3",
-    "@charrue/node-toolkit": "^0.4.0",
     "vite-plugin-inspect": "^0.7.8"
   },
   "devDependencies": {

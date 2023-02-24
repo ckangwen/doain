@@ -4,7 +4,7 @@ import { fileURLToPath } from "url";
 import { normalizePath } from "vite";
 import type { Alias } from "vite";
 
-import type { ResolvedConfig } from "./config/index";
+import type { BuiltPlugins, ResolvedConfig } from "./config/index";
 
 const join = (...args: Parameters<typeof _join>) => {
   return normalizePath(_join(...args));
@@ -24,8 +24,8 @@ export const APP_PATH = join(DIST_CLIENT_PATH, "app");
  */
 function getRouterPath(
   root: string,
-  pages: ResolvedConfig["builtPlugins"]["pages"],
-  pageLayout: ResolvedConfig["builtPlugins"]["pageLayout"],
+  pages: BuiltPlugins["pages"],
+  pageLayout: BuiltPlugins["pageLayout"],
 ) {
   let routerPath = join(DIST_CLIENT_PATH, "app/router/original.js");
   if (pages && pageLayout) {
@@ -72,7 +72,7 @@ export function getUserClientConfigPath(root: string) {
   return userPath || defaultPath;
 }
 
-function getUnocssPath(unocss: ResolvedConfig["builtPlugins"]["unocss"]) {
+function getUnocssPath(unocss: BuiltPlugins["unocss"]) {
   if (unocss === false) {
     return join(DIST_CLIENT_PATH, "app/unocss/disable.js");
   }
@@ -84,6 +84,10 @@ export function createClientAlias(config: ResolvedConfig): Alias[] {
   const { pages, pageLayout, unocss } = builtPlugins;
 
   const alias = [
+    {
+      find: "@",
+      replacement: join(root, "src"),
+    },
     {
       find: "~doain/router",
       replacement: getRouterPath(root, pages, pageLayout),

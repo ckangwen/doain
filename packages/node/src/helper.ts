@@ -5,6 +5,8 @@ export const APP_NAME = "doain";
 
 export const cleanUrl = (url: string): string => url.replace(/#.*$/s, "").replace(/\?.*$/s, "");
 
+export type NotBool<T> = T extends boolean ? never : T;
+
 type NotNill<T> = T extends null | undefined ? never : T;
 
 type Primitive = undefined | null | boolean | string | number | Function;
